@@ -4,26 +4,22 @@ import ir.ac.kntu.util.Cipher;
 
 import java.util.Objects;
 
-public class User {
+public class Admin {
     private String firstName;
     private String username;
     private String hashedPassword;
     private String email;
     private String phoneNumber;
     private String nationalCode;
-    private int rating;
-    private int ranking;
 
-    public User(String firstName, String username, String password, String email, String phoneNumber,
-                String nationalCode) {
+
+    public Admin(String firstName, String username, String password, String email, String phoneNumber, String nationalCode) {
         this.firstName = firstName;
         this.username = username;
         this.hashedPassword = Cipher.sha256(password);
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.nationalCode = nationalCode;
-        this.rating = 0;
-        this.ranking = 0;
     }
 
     public String getFirstName() {
@@ -74,22 +70,6 @@ public class User {
         this.nationalCode = nationalCode;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public int getRanking() {
-        return ranking;
-    }
-
-    public void setRanking(int ranking) {
-        this.ranking = ranking;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -98,17 +78,15 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", nationalCode='" + nationalCode + '\'' +
-                ", rating=" + rating +
-                ", ranking=" + ranking +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof User)) return false;
-        User user = (User) o;
-        return Objects.equals(username, user.username) && Objects.equals(nationalCode, user.nationalCode);
+        if (o == null || !(o instanceof Admin)) return false;
+        Admin admin = (Admin) o;
+        return Objects.equals(username, admin.username) && Objects.equals(nationalCode, admin.nationalCode);
     }
 
     @Override

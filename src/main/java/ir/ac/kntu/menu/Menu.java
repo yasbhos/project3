@@ -9,7 +9,7 @@ public interface Menu {
     void showOptions();
 
     default <T extends Enum<T>> T scanTheEnum(T[] options) {
-        int userInput = ScannerWrapper.nextInt();
+        int userInput = ScannerWrapper.getInstance().nextInt();
         userInput--;
         if (userInput >= 0 && userInput < options.length) {
             return options[userInput];

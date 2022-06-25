@@ -51,8 +51,8 @@ public class LoginMenu implements Menu {
     }
 
     private void signIn() {
-        String username = ScannerWrapper.readString("Enter username: ");
-        String password = ScannerWrapper.readPassword("Enter password: ");
+        String username = ScannerWrapper.getInstance().readString("Enter username: ");
+        String password = ScannerWrapper.getInstance().readPassword("Enter password: ");
         User currentUser = adminDB.getAdminByUsernameAndPassword(username, password);
         if (currentUser == null) {
             currentUser = userDB.getUserByUsernameAndPassword(username, password);
