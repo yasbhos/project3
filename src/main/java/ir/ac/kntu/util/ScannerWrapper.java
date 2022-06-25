@@ -13,7 +13,7 @@ public class ScannerWrapper {
         scanner = new Scanner(System.in);
     }
 
-    public ScannerWrapper getInstance() {
+    public static ScannerWrapper getInstance() {
         return instance;
     }
 
@@ -42,6 +42,10 @@ public class ScannerWrapper {
         return scanner.nextLine();
     }
 
+    public void close() {
+        scanner.close();
+    }
+
     public String readPassword(String message) {
         if (console == null) {
             System.out.println("No console available");
@@ -51,8 +55,47 @@ public class ScannerWrapper {
         return String.valueOf(console.readPassword());
     }
 
-    public void close() {
-        scanner.close();
+    public <T extends Enum<T>> T readEnum(T[] options) {
+        showMenu(options);
+        return scanOption(options);
     }
 
+    public <T extends Enum<T>> T readEnum(T[] options, String menuName) {
+        showMenu(options, menuName);
+        return scanOption(options);
+    }
+
+    public <T extends Enum<T>> T readEnum(T[] options, String menuName, String message) {
+        System.out.println(message);
+        showMenu(options, menuName);
+        return scanOption(options);
+    }
+
+    private <T extends Enum<T>> T scanOption(T[] options) {
+        int userInput = ScannerWrapper.getInstance().nextInt();
+        userInput--;
+        if (userInput >= 0 && userInput < options.length) {
+            return options[userInput];
+        }
+        System.out.println("Invalid option!");
+        return scanOption(options);
+    }
+
+    private <T extends Enum<T>> void showMenu(T[] options) {
+        System.out.println("******************************");
+        for (int i = 0; i < options.length; i++) {
+            System.out.printf("%2d. %s\n", i + 1, options[i].name());
+        }
+        System.out.println("******************************");
+        System.out.println("Please enter your choice: ");
+    }
+
+    private <T extends Enum<T>> void showMenu(T[] options, String menuName) {
+        System.out.println("*************** " + menuName + " ***************");
+        for (int i = 0; i < options.length; i++) {
+            System.out.printf("%2d. %s\n", i + 1, options[i].name());
+        }
+        System.out.println("*************** " + menuName + " ***************");
+        System.out.println("Please enter your choice: ");
+    }
 }
