@@ -3,51 +3,56 @@ package ir.ac.kntu.util;
 import java.io.Console;
 import java.util.Scanner;
 
-public final class ScannerWrapper {
-
-    private static final Console CONSOLE = System.console();
-
-    private static final Scanner SCANNER_GENERATOR = new Scanner(System.in);
+public class ScannerWrapper {
+    private static ScannerWrapper instance = new ScannerWrapper();
+    private Console console;
+    private Scanner scanner;
 
     private ScannerWrapper() {
+        console = System.console();
+        scanner = new Scanner(System.in);
     }
 
-    public static int nextInt() {
-        int nextInt = SCANNER_GENERATOR.nextInt();
-        SCANNER_GENERATOR.nextLine();
+    public ScannerWrapper getInstance() {
+        return instance;
+    }
+
+    public int nextInt() {
+        int nextInt = scanner.nextInt();
+        scanner.nextLine();
         return nextInt;
     }
 
-    public static int readInt(String message) {
+    public int readInt(String message) {
         System.out.print(message);
-        int nextInt = SCANNER_GENERATOR.nextInt();
-        SCANNER_GENERATOR.nextLine();
+        int nextInt = scanner.nextInt();
+        scanner.nextLine();
         return nextInt;
     }
 
-    public static double readDouble(String message) {
+    public double readDouble(String message) {
         System.out.print(message);
-        double nextDouble = SCANNER_GENERATOR.nextDouble();
-        SCANNER_GENERATOR.nextLine();
+        double nextDouble = scanner.nextDouble();
+        scanner.nextLine();
         return nextDouble;
     }
 
-    public static String readString(String message) {
+    public String readString(String message) {
         System.out.print(message);
-        return SCANNER_GENERATOR.nextLine();
+        return scanner.nextLine();
     }
 
-    public static String readPassword(String message) {
-        if (CONSOLE == null) {
+    public String readPassword(String message) {
+        if (console == null) {
             System.out.println("No console available");
             return null;
         }
         System.out.print(message);
-        return String.valueOf(CONSOLE.readPassword());
+        return String.valueOf(console.readPassword());
     }
 
-    public static void close() {
-        SCANNER_GENERATOR.close();
+    public void close() {
+        scanner.close();
     }
 
 }
