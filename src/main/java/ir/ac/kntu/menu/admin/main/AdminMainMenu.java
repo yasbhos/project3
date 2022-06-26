@@ -5,18 +5,19 @@ import ir.ac.kntu.db.CourseDB;
 import ir.ac.kntu.db.QuestionDB;
 import ir.ac.kntu.db.UserDB;
 import ir.ac.kntu.menu.Menu;
+import ir.ac.kntu.menu.admin.change.AdminChangeMenu;
 import ir.ac.kntu.menu.admin.main.AdminMainMenuOption.*;
-import ir.ac.kntu.model.User;
+import ir.ac.kntu.model.Admin;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class AdminMainMenu implements Menu {
-    private User currentAdmin;
+    private Admin currentAdmin;
     private UserDB userDB;
     private CourseDB courseDB;
     private ContestDB contestDB;
     private QuestionDB questionDB;
 
-    public AdminMainMenu(User currentAdmin, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {
+    public AdminMainMenu(Admin currentAdmin, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {
         this.currentAdmin = currentAdmin;
         this.userDB = userDB;
         this.courseDB = courseDB;
@@ -41,8 +42,11 @@ public class AdminMainMenu implements Menu {
             case CONTESTS -> handleContestsSubMenu();
             case QUESTIONS -> handleQuestionsSubMenu();
             case ACCOUNT -> {
+                AdminChangeMenu adminChangeMenu = new AdminChangeMenu(currentAdmin);
+                adminChangeMenu.handleMenu();
             }
             case LOGOUT -> {
+
             }
             default -> {
             }
@@ -59,13 +63,17 @@ public class AdminMainMenu implements Menu {
 
     private void handleUsersSubMenuOption(UsersSubMenu usersSubMenuOption) {
         switch (usersSubMenuOption) {
-            case LIST_OF_USERS -> {
-            }
+            case LIST_OF_USERS -> listOfUsers();
             case BACK -> {
+
             }
             default -> {
             }
         }
+    }
+
+    //TODO
+    private void listOfUsers() {
     }
 
     private void handleCoursesSubMenu() {
@@ -78,13 +86,17 @@ public class AdminMainMenu implements Menu {
 
     private void handleCoursesSubMenuOption(CoursesSubMenu coursesSubMenuOption) {
         switch (coursesSubMenuOption) {
-            case LIST_OF_COURSES -> {
-            }
+            case LIST_OF_COURSES -> listOfCourses();
             case BACK -> {
+
             }
             default -> {
             }
         }
+    }
+
+    //TODO
+    private void listOfCourses() {
     }
 
     private void handleContestsSubMenu() {
@@ -97,15 +109,22 @@ public class AdminMainMenu implements Menu {
 
     private void handleContestsSubMenuOption(ContestsSubMenu contestsSubMenu) {
         switch (contestsSubMenu) {
-            case ADD_CONTEST -> {
-            }
-            case LIST_OF_CONTESTS -> {
-            }
+            case ADD_CONTEST -> addContest();
+            case LIST_OF_CONTESTS -> listOfContests();
             case BACK -> {
+
             }
             default -> {
             }
         }
+    }
+
+    //TODO
+    private void addContest() {
+    }
+
+    //TODO
+    private void listOfContests() {
     }
 
     private void handleQuestionsSubMenu() {
@@ -118,12 +137,16 @@ public class AdminMainMenu implements Menu {
 
     private void handleQuestionsSubMenuOption(QuestionsSubMenu questionsSubMenu) {
         switch (questionsSubMenu) {
-            case LIST_OF_QUESTIONS -> {
-            }
+            case LIST_OF_QUESTIONS -> listOfQuestions();
             case BACK -> {
+
             }
             default -> {
             }
         }
+    }
+
+    //TODO
+    private void listOfQuestions() {
     }
 }

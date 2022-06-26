@@ -2,8 +2,7 @@ package ir.ac.kntu;
 
 import java.util.ArrayList;
 
-import ir.ac.kntu.db.AdminDB;
-import ir.ac.kntu.db.UserDB;
+import ir.ac.kntu.db.*;
 import ir.ac.kntu.menu.login.LoginMenu;
 
 public class Quera {
@@ -17,6 +16,9 @@ public class Quera {
     private void initial() {
         AdminDB adminDB = new AdminDB(new ArrayList<>());
         UserDB userDB = new UserDB(new ArrayList<>());
-        loginMenu = new LoginMenu(adminDB, userDB);
+        CourseDB courseDB = new CourseDB(new ArrayList<>());
+        ContestDB contestDB = new ContestDB(new ArrayList<>());
+        QuestionDB questionDB = new QuestionDB(new ArrayList<>());
+        loginMenu = new LoginMenu(adminDB, userDB, courseDB, contestDB, questionDB);
     }
 }

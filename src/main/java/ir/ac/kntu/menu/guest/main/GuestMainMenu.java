@@ -26,14 +26,22 @@ public class GuestMainMenu implements Menu {
     @Override
     public <T extends Enum<T>> void handleTheOption(T option) {
         switch ((GuestMainMenuOption) option) {
-            case LIST_OF_QUESTIONS -> {
-            }
-            case LIST_OF_CONTESTS -> {
-            }
+            case LIST_OF_QUESTIONS -> listOfQuestions();
+            case LIST_OF_CONTESTS -> listOfContests();
             case BACK -> {
+
             }
             default -> {
             }
         }
     }
+
+    //TODO
+    private void listOfQuestions() {
+    }
+
+    //TODO
+    private void listOfContests() {
+    }
+
 }

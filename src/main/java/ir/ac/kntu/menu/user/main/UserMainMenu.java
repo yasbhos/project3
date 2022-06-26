@@ -32,16 +32,27 @@ public class UserMainMenu implements Menu {
     @Override
     public <T extends Enum<T>> void handleTheOption(T option) {
         switch ((UserMainMenuOption) option) {
-            case REGISTER_TO_COURSE -> {
-            }
-            case REGISTER_TO_CONTEST -> {
-            }
-            case ADD_COURSE -> {
-            }
+            case REGISTER_TO_COURSE -> registerToCourse();
+            case REGISTER_TO_CONTEST -> registerToContest();
+            case ADD_COURSE -> addCourse();
             case LOGOUT -> {
+
             }
             default -> {
             }
         }
     }
+
+    //TODO
+    private void registerToCourse() {
+    }
+
+    //TODO
+    private void registerToContest() {
+    }
+
+    //TODO
+    private void addCourse() {
+    }
+
 }
