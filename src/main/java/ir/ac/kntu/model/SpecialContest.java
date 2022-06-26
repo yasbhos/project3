@@ -3,11 +3,30 @@ package ir.ac.kntu.model;
 import java.util.ArrayList;
 
 public class SpecialContest extends Contest {
+    private class Responder {
+        private String groupName;
+        private ArrayList<Answer> sentAnswers;
+
+        public Responder(String groupName) {
+            this.groupName = groupName;
+            this.sentAnswers = new ArrayList<>();
+        }
+
+        public boolean addAnswer(Answer answer) {
+            return sentAnswers.add(answer);
+        }
+
+        public double getScore() {
+            return sentAnswers.get(sentAnswers.size() - 1).getScore();
+        }
+    }
+
     private static final int MAXIMUM_PARTICIPANTS = 100;
 
     private int maximumGroupsCapacity;
     private ArrayList<Group> groups;
     private ArrayList<User> whosCanParticipant;
+    private ArrayList<Responder> responders;
 
     public SpecialContest(String name, DateTime startDate, DateTime endDate, ArrayList<Question> questions,
                           int maximumGroupCapacity) {
@@ -15,6 +34,7 @@ public class SpecialContest extends Contest {
         this.maximumGroupsCapacity = maximumGroupCapacity;
         this.groups = new ArrayList<>();
         this.whosCanParticipant = new ArrayList<>();
+        this.responders = new ArrayList<>();
     }
 
     public int getMaximumGroupsCapacity() {

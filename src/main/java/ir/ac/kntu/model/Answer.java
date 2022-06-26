@@ -10,14 +10,12 @@ public class Answer {
     private double delayCoefficient;
     private double score;
     private double scoreWithDelay;
-    private boolean finalSent;
 
     public Answer(String description, Question question, String senderUsername) {
         this.description = description;
         this.question = question;
         this.senderUsername = senderUsername;
         this.sentDateTime = DateTimeUtility.now();
-        this.finalSent = true;
     }
 
     public String getDescription() {
@@ -76,14 +74,6 @@ public class Answer {
         this.scoreWithDelay = scoreWithDelay;
     }
 
-    public boolean isFinalSent() {
-        return finalSent;
-    }
-
-    public void setFinalSent(boolean finalSent) {
-        this.finalSent = finalSent;
-    }
-
     @Override
     public String toString() {
         return "Answer{" +
@@ -94,7 +84,6 @@ public class Answer {
                 "\n, delayCoefficient=" + delayCoefficient +
                 ", score=" + score +
                 ", scoreWithDelay=" + scoreWithDelay +
-                ", finalSent=" + finalSent +
                 '}';
     }
 }

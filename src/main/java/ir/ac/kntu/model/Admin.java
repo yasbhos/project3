@@ -12,7 +12,6 @@ public class Admin {
     private String phoneNumber;
     private String nationalCode;
 
-
     public Admin(String firstName, String username, String password, String email, String phoneNumber, String nationalCode) {
         this.firstName = firstName;
         this.username = username;

@@ -3,6 +3,7 @@ package ir.ac.kntu.util;
 import ir.ac.kntu.model.DateTime;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class DateTimeUtility {
     public static DateTime now() {
@@ -52,5 +53,10 @@ public class DateTimeUtility {
         frac1 = (int) ((leapDays1 - (int) (leapDays1)) * 1000);
 
         return frac0 <= b && frac1 > b;
+    }
+
+    public static long getAverageSentTime(DateTime baseCase, ArrayList<DateTime> sentDateTimes) {
+        //TODO
+        return 0;
     }
 }

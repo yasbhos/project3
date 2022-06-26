@@ -1,13 +1,30 @@
 package ir.ac.kntu.model;
 
 import ir.ac.kntu.util.DateTimeUtility;
+import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class Question {
+    private class Responder {
+        private String username;
+        private ArrayList<Answer> sentAnswers;
+
+        public Responder(String username) {
+            this.username = username;
+            this.sentAnswers = new ArrayList<>();
+        }
+
+        public boolean addAnswer(Answer answer) {
+            return sentAnswers.add(answer);
+        }
+
+        public double getScore() {
+            return sentAnswers.get(sentAnswers.size() - 1).getScore();
+        }
+    }
+
     public enum QuestionType {
         CHOICE_ONE, SHORT_ANSWER, LONG_ANSWER, FILL_IN_THE_BLANK
     }
@@ -22,7 +39,7 @@ public class Question {
     private QuestionType type;
     private QuestionLevel level;
     private DateTime uploadDateTime;
-    private Map<User, ArrayList<Answer>> sentAnswers;
+    private ArrayList<Responder> responders;
 
     public Question(String name, double score, String description, QuestionType type, QuestionLevel level) {
         this.name = name;
@@ -31,7 +48,7 @@ public class Question {
         this.type = type;
         this.level = level;
         this.uploadDateTime = DateTimeUtility.now();
-        this.sentAnswers = new HashMap<>();
+        this.responders = new ArrayList<>();
     }
 
     public String getName() {
@@ -80,6 +97,12 @@ public class Question {
 
     public void setUploadDateTime(DateTime uploadDateTime) {
         this.uploadDateTime = uploadDateTime;
+    }
+
+    public Answer readAnswer(User user, String message) {
+        System.out.println(message);
+        String description = ScannerWrapper.getInstance().readString("Enter answer: ");
+        return new Answer(description, this, user.getUsername());
     }
 
     public Question deppCopy() {

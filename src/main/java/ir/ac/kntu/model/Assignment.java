@@ -3,9 +3,58 @@ package ir.ac.kntu.model;
 import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 public class Assignment {
+    private class Responder implements Comparable<Responder> {
+        private String username;
+        private double totalScore;
+        private long averageSentTime;
+
+        public Responder(String username) {
+            this.username = username;
+        }
+
+        public double getTotalScore() {
+            return totalScore;
+        }
+
+        public void setTotalScore(double totalScore) {
+            this.totalScore = totalScore;
+        }
+
+        public long getAverageSentTime() {
+            return averageSentTime;
+        }
+
+        public void setAverageSentTime(long averageSentTime) {
+            this.averageSentTime = averageSentTime;
+        }
+
+        @Override
+        public int compareTo(Responder o) {
+            if (this.totalScore > o.totalScore) {
+                return 1;
+            }
+            if (this.totalScore < o.totalScore) {
+                return -1;
+            }
+            if (this.averageSentTime < o.averageSentTime) {
+                return 1;
+            }
+            if (this.averageSentTime > o.averageSentTime) {
+                return -1;
+            }
+            return 0;
+        }
+
+        @Override
+        public String toString() {
+            return username + " | " + totalScore + " | " + averageSentTime;
+        }
+    }
+
     public enum Status {ACTIVE, INACTIVE}
 
     private String name;
@@ -17,6 +66,7 @@ public class Assignment {
     private Status assignmentStatus;
     private Status scoreBoardStatus;
     private ArrayList<Question> questions;
+    private ArrayList<Responder> responders;
 
     public Assignment(String name, String description, DateTime startDate, DateTime endDate,
                       int delayCoefficient, DateTime delayDateTime, Status assignmentStatus, Status scoreBoardStatus) {
@@ -29,6 +79,7 @@ public class Assignment {
         this.assignmentStatus = assignmentStatus;
         this.scoreBoardStatus = scoreBoardStatus;
         this.questions = new ArrayList<>();
+        this.responders = new ArrayList<>();
     }
 
     public String getName() {
@@ -120,10 +171,13 @@ public class Assignment {
     }
 
     public void scoreBoard() {
+        Collections.sort(responders);
         System.out.println("Scoreboard for " + this.name);
         System.out.println("------------------------------------------------------------");
-        System.out.println("| Student name | Mark |");
-        //TODO
+        System.out.println("| Student name | Mark | Average Time");
+        for (Responder responder : responders) {
+            System.out.println(responder);
+        }
         System.out.println("------------------------------------------------------------");
     }
 
