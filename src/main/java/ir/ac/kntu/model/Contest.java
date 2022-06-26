@@ -1,18 +1,26 @@
 package ir.ac.kntu.model;
 
+import ir.ac.kntu.util.IdGenerator;
+
 import java.util.ArrayList;
 
 public class Contest {
+    private String id;
     private String name;
     private DateTime startDate;
     private DateTime endDate;
     private ArrayList<Question> questions;
 
     public Contest(String name, DateTime startDate, DateTime endDate, ArrayList<Question> questions) {
+        this.id = IdGenerator.createID();
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.questions = questions;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {

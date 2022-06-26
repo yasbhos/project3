@@ -1,6 +1,7 @@
 package ir.ac.kntu.model;
 
 import ir.ac.kntu.util.Cipher;
+import ir.ac.kntu.util.IdGenerator;
 import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class Course {
         OPEN_PUBLIC, OPEN_PRIVATE, CLOSE
     }
 
+    private String id;
     private String name;
     private String institute;
     private User lecturer;
@@ -23,6 +25,7 @@ public class Course {
 
     public Course(String name, String institute, User lecturer, DateTime startDate, CourseStatus status,
                   String password, String description) {
+        this.id = IdGenerator.createID();
         this.name = name;
         this.institute = institute;
         this.lecturer = lecturer;
@@ -32,6 +35,10 @@ public class Course {
         this.description = description;
         this.register = new ArrayList<>();
         this.assignments = new ArrayList<>();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {
@@ -136,9 +143,9 @@ public class Course {
                 "name='" + name + '\'' +
                 ", institute='" + institute + '\'' +
                 ", lecturer=" + lecturer +
-                ", startDate:\n" + startDate +
-                "\n, status=" + status +
-                "\n, description='" + description + '\'' +
+                "\nstartDate: " + startDate +
+                "\nstatus=" + status +
+                "\ndescription='" + description + '\'' +
                 "\n}";
     }
 

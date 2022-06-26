@@ -46,7 +46,7 @@ public class User {
         return hashedPassword;
     }
 
-    public void setHashedPassword(String password) {
+    public void setPassword(String password) {
         this.hashedPassword = Cipher.sha256(password);
     }
 

@@ -1,5 +1,7 @@
 package ir.ac.kntu.model;
 
+import ir.ac.kntu.util.ScannerWrapper;
+
 import java.util.ArrayList;
 
 public class SpecialContest extends Contest {
@@ -25,7 +27,6 @@ public class SpecialContest extends Contest {
 
     private int maximumGroupsCapacity;
     private ArrayList<Group> groups;
-    private ArrayList<User> whosCanParticipant;
     private ArrayList<Responder> responders;
 
     public SpecialContest(String name, DateTime startDate, DateTime endDate, ArrayList<Question> questions,
@@ -33,7 +34,6 @@ public class SpecialContest extends Contest {
         super(name, startDate, endDate, questions);
         this.maximumGroupsCapacity = maximumGroupCapacity;
         this.groups = new ArrayList<>();
-        this.whosCanParticipant = new ArrayList<>();
         this.responders = new ArrayList<>();
     }
 
@@ -46,7 +46,12 @@ public class SpecialContest extends Contest {
     }
 
     public boolean addGroup(String name, ArrayList<User> members) {
+        if ((groups.size() + 1) * maximumGroupsCapacity >= MAXIMUM_PARTICIPANTS) {
+            return false;
+        }
+
         Group group = new Group(name, maximumGroupsCapacity, members);
+
         return groups.add(group);
     }
 
@@ -54,11 +59,21 @@ public class SpecialContest extends Contest {
         return groups.remove(group);
     }
 
-    public boolean addWhosCanParticipant(User user) {
-        return whosCanParticipant.add(user);
-    }
+    public boolean addParticipantToExistingGroup(User participant) {
+        for (Group group : groups) {
+            System.out.println("Name: " + group.getName());
+        }
+        String name = ScannerWrapper.getInstance().readString("Enter group name: ");
 
-    public boolean removeWhosCanParticipant(User user) {
-        return whosCanParticipant.remove(user);
+        for (Group group : groups) {
+            if (group.getName().equals(name)) {
+                if (group.addMember(participant)) {
+                    System.out.println("Successfully added");
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -3,7 +3,7 @@ package ir.ac.kntu.menu.login;
 import ir.ac.kntu.db.*;
 import ir.ac.kntu.menu.Menu;
 import ir.ac.kntu.menu.admin.main.AdminMainMenu;
-import ir.ac.kntu.menu.guest.main.GuestMainMenu;
+import ir.ac.kntu.menu.guest.GuestMenu;
 import ir.ac.kntu.menu.user.main.UserMainMenu;
 import ir.ac.kntu.model.Admin;
 import ir.ac.kntu.model.User;
@@ -57,7 +57,7 @@ public class LoginMenu implements Menu {
                 return;
             }
             System.out.println("Successfully signed in");
-            UserMainMenu userMainMenu = new UserMainMenu(currentUser, courseDB, contestDB, questionDB);
+            UserMainMenu userMainMenu = new UserMainMenu(currentUser, userDB, courseDB, contestDB, questionDB);
             userMainMenu.handleMenu();
         }
         System.out.println("Successfully signed in");
@@ -72,8 +72,8 @@ public class LoginMenu implements Menu {
     }
 
     private void continueAsGuest() {
-        GuestMainMenu guestMainMenu = new GuestMainMenu(contestDB, questionDB);
-        guestMainMenu.handleMenu();
+        GuestMenu guestMenu = new GuestMenu(contestDB, questionDB);
+        guestMenu.handleMenu();
     }
 
     private void exit() {

@@ -1,6 +1,8 @@
 package ir.ac.kntu.db;
 
 import ir.ac.kntu.model.Contest;
+import ir.ac.kntu.model.PrivateContest;
+import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.DateTimeUtility;
 import ir.ac.kntu.util.ScannerWrapper;
 
@@ -25,19 +27,43 @@ public class ContestDB {
         return contests.contains(contest);
     }
 
-    public Contest getContest() {
-        for (Contest contest :
-                contests) {
-            if (contest.getEndDate().compareTo(DateTimeUtility.now()) > 0) {
-                System.out.println("Name: " + contest.getName());
-            }
+    public Contest getContestForAdmin() {
+        for (Contest contest : contests) {
+            System.out.println("ID: " + contest.getId() +
+                    "Name: " + contest.getName());
         }
-        String name = ScannerWrapper.getInstance().readString("Enter contest name: ");
+        String id = ScannerWrapper.getInstance().readString("Enter contest id: ");
 
-        return getContestByName(name);
+        return getContestByID(id);
     }
 
-    public Contest getContestByName(String name) {
-        return contests.stream().filter(contest -> contest.getName().equals(name)).findFirst().orElse(null);
+    public Contest getContestForUser(User currentUser) {
+        for (Contest contest : contests) {
+            if (contest instanceof PrivateContest privateContest &&
+                    !privateContest.canParticipants(currentUser)) {
+                continue;
+            }
+            System.out.println("ID: " + contest.getId() +
+                    "Name: " + contest.getName());
+        }
+        String id = ScannerWrapper.getInstance().readString("Enter contest id: ");
+
+        return getContestByID(id);
+    }
+
+    public Contest getContestForGuest() {
+        for (Contest contest : contests) {
+            if (contest.getEndDate().compareTo(DateTimeUtility.now()) > 0) {
+                System.out.println("ID: " + contest.getId() +
+                        "Name: " + contest.getName());
+            }
+        }
+        String id = ScannerWrapper.getInstance().readString("Enter contest id: ");
+
+        return getContestByID(id);
+    }
+
+    public Contest getContestByID(String id) {
+        return contests.stream().filter(contest -> contest.getId().equals(id)).findFirst().orElse(null);
     }
 }

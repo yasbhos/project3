@@ -46,7 +46,7 @@ public class GuestMenu implements Menu {
 
     private void listOfContests() {
         System.out.println("List of finished contests: ");
-        Contest contest = contestDB.getContest();
+        Contest contest = contestDB.getContestForGuest();
         System.out.println(contest);
     }
 

@@ -1,14 +1,17 @@
 package ir.ac.kntu.menu.user.change;
 
+import ir.ac.kntu.db.UserDB;
 import ir.ac.kntu.menu.Menu;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class UserChangeMenu implements Menu {
     private User user;
+    private UserDB userDB;
 
-    public UserChangeMenu(User user) {
+    public UserChangeMenu(User user, UserDB userDB) {
         this.user = user;
+        this.userDB = userDB;
     }
 
     @Override
@@ -37,27 +40,42 @@ public class UserChangeMenu implements Menu {
         }
     }
 
-    //TODO
     private void changeFirstName() {
+        String firstName = ScannerWrapper.getInstance().readString("Enter new first name: ");
+        user.setFirstName(firstName);
+        System.out.println("Successfully changed");
     }
 
-    //TODO
     private void changeUsername() {
+        String username = ScannerWrapper.getInstance().readString("Enter new username: ");
+        if (userDB.getUserByUsername(username) != null) {
+            System.out.println("Already used");
+            return;
+        }
+        user.setUsername(username);
     }
 
-    //TODO
     private void changePassword() {
+        String password = ScannerWrapper.getInstance().readPassword("Enter new password: ");
+        user.setPassword(password);
+        System.out.println("Successfully changed");
     }
 
-    //TODO
     private void changeEmail() {
+        String email = ScannerWrapper.getInstance().readString("Enter new email: ");
+        user.setEmail(email);
+        System.out.println("Successfully changed");
     }
 
-    //TODO
     private void changePhoneNumber() {
+        String phoneNumber = ScannerWrapper.getInstance().readString("Enter new phone number: ");
+        user.setPhoneNumber(phoneNumber);
+        System.out.println("Successfully changed");
     }
 
-    //TODO
     private void changeNationalCode() {
+        String nationalCode = ScannerWrapper.getInstance().readString("Enter new national code: ");
+        user.setNationalCode(nationalCode);
+        System.out.println("Successfully changed");
     }
 }
