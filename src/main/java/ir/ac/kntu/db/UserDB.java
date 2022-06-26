@@ -1,6 +1,7 @@
 package ir.ac.kntu.db;
 
 import ir.ac.kntu.model.User;
+import ir.ac.kntu.util.Cipher;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ public class UserDB {
 
     public User getUserByUsernameAndPassword(String username, String password) {
         return users.stream().filter(user ->
-                user.getUsername().equals(username) && user.getPassword().equals(password)
+                user.getUsername().equals(username) && user.getHashedPassword().equals(Cipher.sha256(password))
         ).findFirst().orElse(null);
     }
 }

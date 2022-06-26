@@ -1,41 +1,36 @@
 package ir.ac.kntu.menu.login;
 
-import ir.ac.kntu.db.AdminDB;
-import ir.ac.kntu.db.UserDB;
+import ir.ac.kntu.db.*;
 import ir.ac.kntu.menu.Menu;
 import ir.ac.kntu.menu.admin.main.AdminMainMenu;
 import ir.ac.kntu.menu.guest.main.GuestMainMenu;
 import ir.ac.kntu.menu.user.main.UserMainMenu;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.ScannerWrapper;
+import ir.ac.kntu.util.UserUtility;
 
 public class LoginMenu implements Menu {
-    private final AdminDB adminDB;
-    private final UserDB userDB;
+    private AdminDB adminDB;
+    private UserDB userDB;
+    private CourseDB courseDB;
+    private ContestDB contestDB;
+    private QuestionDB questionDB;
 
-    public LoginMenu(AdminDB adminDB, UserDB userDB) {
+    public LoginMenu(AdminDB adminDB, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {
         this.adminDB = adminDB;
         this.userDB = userDB;
+        this.courseDB = courseDB;
+        this.contestDB = contestDB;
+        this.questionDB = questionDB;
     }
 
     @Override
     public void handleMenu() {
-        showOptions();
         LoginMenuOption option;
         do {
-            option = scanTheEnum(LoginMenuOption.values());
+            option = ScannerWrapper.getInstance().readEnum(LoginMenuOption.values());
             handleTheOption(option);
         } while (option != LoginMenuOption.EXIT);
-    }
-
-    @Override
-    public void showOptions() {
-        System.out.println("*************** LOGIN MENU ***************");
-        for (int i = 0; i < LoginMenuOption.values().length; i++) {
-            System.out.printf("%2d. %s\n", i + 1, LoginMenuOption.values()[i].name());
-        }
-        System.out.println("*************** LOGIN MENU ***************");
-        System.out.println("Please enter your choice: ");
     }
 
     @Override
@@ -57,28 +52,26 @@ public class LoginMenu implements Menu {
         if (currentUser == null) {
             currentUser = userDB.getUserByUsernameAndPassword(username, password);
             if (currentUser == null) {
-                System.out.println(); //TODO
+                System.out.println("User not found");
                 return;
             }
-            //TODO
-            System.out.println();
-            UserMainMenu userMainMenu = new UserMainMenu(currentUser);
+            System.out.println("Successfully signed in");
+            UserMainMenu userMainMenu = new UserMainMenu(currentUser, courseDB, contestDB, questionDB);
             userMainMenu.handleMenu();
         }
-        //TODO
-        System.out.println();
-        AdminMainMenu adminMainMenu = new AdminMainMenu(currentUser);
+        System.out.println("Successfully signed in");
+        AdminMainMenu adminMainMenu = new AdminMainMenu(currentUser, userDB, courseDB, contestDB, questionDB);
         adminMainMenu.handleMenu();
     }
 
     private void signUp() {
-        //TODO
+        User user = UserUtility.readUser("Enter your attributes");
+        userDB.addUser(user);
+        System.out.println("Successfully signed up");
     }
 
     private void continueAsGuest() {
-        //TODO
-        System.out.println();
-        GuestMainMenu guestMainMenu = new GuestMainMenu();
+        GuestMainMenu guestMainMenu = new GuestMainMenu(contestDB, questionDB);
         guestMainMenu.handleMenu();
     }
 
