@@ -58,4 +58,22 @@ public class Contest {
         //TODO
         System.out.println("------------------------------------------------------------");
     }
+
+    @Override
+    public String toString() {
+        String contestToString = "Contest{" +
+                "name='" + name + '\'' +
+                "\nstartDate=" + startDate +
+                "\nendDate=" + endDate;
+
+        System.out.println("Questions:");
+        for (Question question :
+                questions) {
+            contestToString += question.getName() + "\n";
+        }
+
+        contestToString += "\n}";
+
+        return contestToString;
+    }
 }

@@ -116,11 +116,11 @@ public class Question {
         return "Question{" +
                 "name='" + name + '\'' +
                 ", score=" + score +
-                "\n, description='" + description + '\'' +
-                "\n, type=" + type +
+                "\ndescription='" + description + '\'' +
+                "\ntype=" + type +
                 ", level=" + level +
-                "\n, uploadDateTime=" + uploadDateTime +
-                '}';
+                "\nuploadDateTime=" + uploadDateTime +
+                "\n}";
     }
 
     @Override
