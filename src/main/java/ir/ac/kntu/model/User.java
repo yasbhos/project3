@@ -5,6 +5,7 @@ import ir.ac.kntu.util.Cipher;
 import java.util.Objects;
 
 public class User {
+    private boolean admin;
     private String firstName;
     private String username;
     private String hashedPassword;
@@ -14,8 +15,8 @@ public class User {
     private int rating;
     private int ranking;
 
-    public User(String firstName, String username, String password, String email, String phoneNumber,
-                String nationalCode) {
+    public User(String firstName, String username, String password, String email, String phoneNumber, String nationalCode) {
+        this.admin = false;
         this.firstName = firstName;
         this.username = username;
         this.hashedPassword = Cipher.sha256(password);
@@ -24,6 +25,14 @@ public class User {
         this.nationalCode = nationalCode;
         this.rating = 0;
         this.ranking = 0;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public String getFirstName() {
@@ -93,6 +102,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
+                "admin='" + admin + '\'' +
                 "firstName='" + firstName + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
@@ -105,9 +115,14 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof User)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !(o instanceof User)) {
+            return false;
+        }
         User user = (User) o;
+
         return Objects.equals(username, user.username) && Objects.equals(nationalCode, user.nationalCode);
     }
 

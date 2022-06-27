@@ -9,8 +9,9 @@ public class PrivateContest extends Contest {
     private ArrayList<User> whosCanParticipant;
     private ArrayList<Responder> responders;
 
-    public PrivateContest(String name, DateTime startDate, DateTime endDate, ArrayList<Question> questions) {
-        super(name, startDate, endDate, questions);
+    public PrivateContest(User ownerAdmin, String name, DateTime startDate, DateTime endDate,
+                          ArrayList<Question> questions, boolean automaticScoring) {
+        super(ownerAdmin, name, startDate, endDate, questions, automaticScoring);
         this.participants = new ArrayList<>(20); //Maximum number of participants is 20 User
         this.whosCanParticipant = new ArrayList<>();
         this.responders = new ArrayList<>();
@@ -37,7 +38,7 @@ public class PrivateContest extends Contest {
         return whosCanParticipant.remove(user);
     }
 
-    public boolean canParticipants(User user) {
+    public boolean canParticipant(User user) {
         return whosCanParticipant.contains(user);
     }
 

@@ -4,6 +4,7 @@ import ir.ac.kntu.model.Question;
 import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class QuestionDB {
     private ArrayList<Question> questions;
@@ -25,19 +26,41 @@ public class QuestionDB {
     }
 
     public Question getQuestion() {
-        for (Question question :
-                questions) {
-            System.out.println("Name: " + question.getName() +
+        sortQuestions();
+
+        for (Question question : questions) {
+            System.out.println("Id: " + question.getId() +
+                    ", name: " + question.getName() +
                     ", score: " + question.getScore() +
                     ", type: " + question.getType() +
                     ", level: " + question.getLevel());
         }
-        String name = ScannerWrapper.getInstance().readString("Enter question name: ");
+        String id = ScannerWrapper.getInstance().readString("Enter question id: ");
+        Question question = getQuestionById(id);
+        if (question == null) {
+            System.out.println("Invalid Id");
+        }
 
-        return getQuestionByName(name);
+        return question;
     }
 
-    public Question getQuestionByName(String name) {
-        return questions.stream().filter(question -> question.getName().equals(name)).findFirst().orElse(null);
+    private void sortQuestions() {
+        enum SortBy {
+            UPLOAD_TIME,
+            DIFFICULTY,
+            LIST
+        }
+
+        SortBy sortBy = ScannerWrapper.getInstance().readEnum(SortBy.values(), "SORTING OPTION");
+        switch (sortBy) {
+            case UPLOAD_TIME, LIST -> questions.sort(Comparator.comparing(Question::getUploadDateTime));
+            case DIFFICULTY -> questions.sort(Comparator.comparing(Question::getLevel));
+            default -> {
+            }
+        }
+    }
+
+    public Question getQuestionById(String id) {
+        return questions.stream().filter(question -> question.getId().equals(id)).findFirst().orElse(null);
     }
 }

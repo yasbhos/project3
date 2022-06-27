@@ -22,6 +22,7 @@ public class ShortAnswerQuestion extends Question {
     @Override
     public Answer readAnswer(User user, String message) {
         String answer = ScannerWrapper.getInstance().readString(message);
+
         return new Answer(user.getUsername(), this, answer);
     }
 }

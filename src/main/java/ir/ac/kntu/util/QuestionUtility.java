@@ -10,7 +10,7 @@ public class QuestionUtility {
 
         String name = ScannerWrapper.getInstance().readString("Enter question name: ");
         double score = ScannerWrapper.getInstance().readDouble("Enter question score: ");
-        String description = ScannerWrapper.getInstance().readString("Enter question description: \n");
+        String description = ScannerWrapper.getInstance().readString("Enter question description: ");
         QuestionType type = ScannerWrapper.getInstance().readEnum(QuestionType.values());
         QuestionLevel level = ScannerWrapper.getInstance().readEnum(QuestionLevel.values());
 

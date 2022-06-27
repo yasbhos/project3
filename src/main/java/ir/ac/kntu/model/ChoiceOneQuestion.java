@@ -27,6 +27,7 @@ public class ChoiceOneQuestion extends Question {
     public Answer readAnswer(User user, String message) {
         System.out.println(message);
         Choices answer = ScannerWrapper.getInstance().readEnum(Choices.values(), "Choices");
+
         return new Answer(user.getUsername(), this, answer.toString());
     }
 

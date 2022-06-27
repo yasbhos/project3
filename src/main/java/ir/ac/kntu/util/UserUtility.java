@@ -1,13 +1,19 @@
 package ir.ac.kntu.util;
 
+import ir.ac.kntu.db.AdminDB;
+import ir.ac.kntu.db.UserDB;
 import ir.ac.kntu.model.User;
 
 public class UserUtility {
-    public static User readUser(String massage) {
+    public static User readUser(String massage, AdminDB adminDB, UserDB userDB) {
         System.out.println(massage);
 
         String firstName = ScannerWrapper.getInstance().readString("Enter firstname: ");
-        String userName = ScannerWrapper.getInstance().readString("Enter username: ");
+        String username = ScannerWrapper.getInstance().readString("Enter username: ");
+        if (adminDB.isUsernameUnique(username) || !userDB.isUsernameUnique(username)) {
+            System.out.println("This username has already been used");
+            return null;
+        }
         String passToHash = ScannerWrapper.getInstance().readPassword("Enter password: ");
         if (passToHash == null) {
             return null;
@@ -16,6 +22,6 @@ public class UserUtility {
         String phoneNumber = ScannerWrapper.getInstance().readString("Enter phone number: ");
         String nationalCode = ScannerWrapper.getInstance().readString("Enter national code: ");
 
-        return new User(firstName, userName, passToHash, email, phoneNumber, nationalCode);
+        return new User(firstName, username, passToHash, email, phoneNumber, nationalCode);
     }
 }

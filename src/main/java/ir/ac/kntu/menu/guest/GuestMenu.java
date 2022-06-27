@@ -17,10 +17,10 @@ public class GuestMenu implements Menu {
     }
 
     @Override
-    public void handleMenu() {
+    public void menu() {
         GuestMenuOption guestMenuOption;
         do {
-            guestMenuOption = ScannerWrapper.getInstance().readEnum(GuestMenuOption.values(), "Guest Menu");
+            guestMenuOption = ScannerWrapper.getInstance().readEnum(GuestMenuOption.values(), "GUEST MENU");
             handleTheOption(guestMenuOption);
         } while (guestMenuOption != GuestMenuOption.BACK);
     }
@@ -30,23 +30,28 @@ public class GuestMenu implements Menu {
         switch ((GuestMenuOption) option) {
             case LIST_OF_QUESTIONS -> listOfQuestions();
             case LIST_OF_CONTESTS -> listOfContests();
-            case BACK -> {
-
-            }
             default -> {
             }
         }
     }
 
     private void listOfQuestions() {
-        System.out.println("Bank of questions:");
+        System.out.println("Bank of questions");
         Question question = questionDB.getQuestion();
+        if (question == null) {
+            return;
+        }
+
         System.out.println(question);
     }
 
     private void listOfContests() {
-        System.out.println("List of finished contests: ");
+        System.out.println("List of finished contests");
         Contest contest = contestDB.getContestForGuest();
+        if (contest == null) {
+            return;
+        }
+
         System.out.println(contest);
     }
 

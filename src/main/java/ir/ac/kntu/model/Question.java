@@ -1,38 +1,28 @@
 package ir.ac.kntu.model;
 
 import ir.ac.kntu.util.DateTimeUtility;
+import ir.ac.kntu.util.IdGenerator;
 import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Question {
-    private class Responder {
-        private String username;
-        private ArrayList<Answer> sentAnswers;
-
-        public Responder(String username) {
-            this.username = username;
-            this.sentAnswers = new ArrayList<>();
-        }
-
-        public boolean addAnswer(Answer answer) {
-            return sentAnswers.add(answer);
-        }
-
-        public double getScore() {
-            return sentAnswers.get(sentAnswers.size() - 1).getScore();
-        }
-    }
-
     public enum QuestionType {
-        CHOICE_ONE, SHORT_ANSWER, LONG_ANSWER, FILL_IN_THE_BLANK
+        CHOICE_ONE,
+        SHORT_ANSWER,
+        LONG_ANSWER,
+        FILL_IN_THE_BLANK
     }
 
     public enum QuestionLevel {
-        EASY, MEDIUM, HARD, VERY_HARD
+        EASY,
+        MEDIUM,
+        HARD,
+        VERY_HARD
     }
 
+    private String id;
     private String name;
     private double score;
     private String description;
@@ -42,6 +32,7 @@ public class Question {
     private ArrayList<Responder> responders;
 
     public Question(String name, double score, String description, QuestionType type, QuestionLevel level) {
+        this.id = IdGenerator.createID();
         this.name = name;
         this.score = score;
         this.description = description;
@@ -49,6 +40,10 @@ public class Question {
         this.level = level;
         this.uploadDateTime = DateTimeUtility.now();
         this.responders = new ArrayList<>();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {
@@ -99,15 +94,39 @@ public class Question {
         this.uploadDateTime = uploadDateTime;
     }
 
+    public void addAnswer(User user, Answer answer) {
+        for (Responder responder : responders) {
+            if (responder.username.equals(user.getUsername())) {
+                responder.addAnswer(answer);
+                return;
+            }
+        }
+
+        Responder responder = new Responder(user.getUsername());
+        responder.addAnswer(answer);
+    }
+
+    public void listSentAnswers(User user) {
+        for (Responder responder : responders) {
+            if (responder.username.equals(user.getUsername())) {
+                for (Answer answer : responder.sentAnswers) {
+                    System.out.println(answer);
+                }
+            }
+        }
+    }
+
     public Answer readAnswer(User user, String message) {
         System.out.println(message);
         String description = ScannerWrapper.getInstance().readString("Enter answer: ");
+
         return new Answer(description, this, user.getUsername());
     }
 
     public Question deppCopy() {
         Question question = new Question(this.name, this.score, this.description, this.type, this.level);
         question.uploadDateTime = this.uploadDateTime;
+
         return question;
     }
 
@@ -139,5 +158,23 @@ public class Question {
     @Override
     public int hashCode() {
         return Objects.hash(name, score, description, type, level);
+    }
+
+    private class Responder {
+        private String username;
+        private ArrayList<Answer> sentAnswers;
+
+        public Responder(String username) {
+            this.username = username;
+            this.sentAnswers = new ArrayList<>();
+        }
+
+        public boolean addAnswer(Answer answer) {
+            return sentAnswers.add(answer);
+        }
+
+        public double getScore() {
+            return sentAnswers.get(sentAnswers.size() - 1).getScore();
+        }
     }
 }

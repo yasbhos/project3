@@ -25,15 +25,20 @@ public class CourseDB {
     }
 
     public Course getCourse() {
-        String input = ScannerWrapper.getInstance().readString("Search by Name, Lecturer or Institute?(N/L/I)");
-        switch (input) {
-            case "N" -> searchCourseByName();
-            case "L" -> searchCourseByLecturer();
-            case "I" -> searchCourseByInstitute();
-            default -> System.out.println("Invalid option");
+        enum SearchBy {
+            NAME,
+            LECTURER,
+            INSTITUTE
         }
 
-        return null;
+        SearchBy searchBy = ScannerWrapper.getInstance().readEnum(SearchBy.values(), "SEARCH BY");
+
+        return switch (searchBy) {
+            case NAME -> searchCourseByName();
+            case LECTURER -> searchCourseByLecturer();
+            case INSTITUTE -> searchCourseByInstitute();
+            default -> null;
+        };
     }
 
     public Course searchCourseByName() {
@@ -41,26 +46,37 @@ public class CourseDB {
 
         for (Course course : courses) {
             if (course.getName().equals(name)) {
-                System.out.println(course);
+                System.out.println("Id: " + course.getId() +
+                        ", name: " + course.getName() +
+                        ", lecturer: " + course.getLecturer() +
+                        ", institute: " + course.getInstitute());
             }
         }
-        String id = ScannerWrapper.getInstance().readString("Enter course id: ");
+        String id = ScannerWrapper.getInstance().readString("Enter course Id: ");
+        Course course = getCourseByID(id);
+        if (course == null) {
+            System.out.println("Invalid Id");
+        }
 
-        return getCourseByID(id);
+        return course;
     }
 
 
     public Course searchCourseByLecturer() {
-        String lecturer = ScannerWrapper.getInstance().readString("Enter course lecturer: ");
+        String lecturer = ScannerWrapper.getInstance().readString("Enter course lecturer name: ");
 
         for (Course course : courses) {
-            if (course.getLecturer().equals(lecturer)) {
+            if (course.getLecturer().getFirstName().equals(lecturer)) {
                 System.out.println(course);
             }
         }
-        String id = ScannerWrapper.getInstance().readString("Enter course id: ");
+        String id = ScannerWrapper.getInstance().readString("Enter course Id: ");
+        Course course = getCourseByID(id);
+        if (course == null) {
+            System.out.println("Invalid Id");
+        }
 
-        return getCourseByID(id);
+        return course;
     }
 
     public Course searchCourseByInstitute() {
@@ -68,14 +84,20 @@ public class CourseDB {
 
         for (Course course : courses) {
             if (course.getInstitute().equals(institute)) {
-                System.out.println(course);
+                System.out.println("Id: " + course.getId() +
+                        ", name: " + course.getName() +
+                        ", lecturer: " + course.getLecturer() +
+                        ", institute: " + course.getInstitute());
             }
         }
-        String id = ScannerWrapper.getInstance().readString("Enter course id: ");
+        String id = ScannerWrapper.getInstance().readString("Enter course Id: ");
+        Course course = getCourseByID(id);
+        if (course == null) {
+            System.out.println("Invalid Id");
+        }
 
-        return getCourseByID(id);
+        return course;
     }
-
 
     public Course getCourseByID(String id) {
         return courses.stream().filter(course -> course.getId().equals(id)).findFirst().orElse(null);

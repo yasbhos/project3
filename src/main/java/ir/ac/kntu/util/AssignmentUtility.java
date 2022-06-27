@@ -16,7 +16,9 @@ public class AssignmentUtility {
         DateTime delayDate = DateTimeUtility.readDateTime("Enter delay date and time: ");
         Status assignmentStatus = ScannerWrapper.getInstance().readEnum(Status.values(), "STATUS", "Enter assignment state: ");
         Status scoreBoardStatus = ScannerWrapper.getInstance().readEnum(Status.values(), "STATUS", "Enter scoreBoard state: ");
+        Assignment assignment = new Assignment(name, description, startDate, endDate, delayCoefficient, delayDate, assignmentStatus,
+                scoreBoardStatus, true);
 
-        return new Assignment(name, description, startDate, endDate, delayCoefficient, delayDate, assignmentStatus, scoreBoardStatus);
+        return assignment;
     }
 }

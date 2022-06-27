@@ -7,55 +7,10 @@ import java.util.Collections;
 import java.util.Objects;
 
 public class Assignment {
-    private class Responder implements Comparable<Responder> {
-        private String username;
-        private double totalScore;
-        private long averageSentTime;
-
-        public Responder(String username) {
-            this.username = username;
-        }
-
-        public double getTotalScore() {
-            return totalScore;
-        }
-
-        public void setTotalScore(double totalScore) {
-            this.totalScore = totalScore;
-        }
-
-        public long getAverageSentTime() {
-            return averageSentTime;
-        }
-
-        public void setAverageSentTime(long averageSentTime) {
-            this.averageSentTime = averageSentTime;
-        }
-
-        @Override
-        public int compareTo(Responder o) {
-            if (this.totalScore > o.totalScore) {
-                return 1;
-            }
-            if (this.totalScore < o.totalScore) {
-                return -1;
-            }
-            if (this.averageSentTime < o.averageSentTime) {
-                return 1;
-            }
-            if (this.averageSentTime > o.averageSentTime) {
-                return -1;
-            }
-            return 0;
-        }
-
-        @Override
-        public String toString() {
-            return username + " | " + totalScore + " | " + averageSentTime;
-        }
+    public enum Status {
+        ACTIVE,
+        INACTIVE
     }
-
-    public enum Status {ACTIVE, INACTIVE}
 
     private String name;
     private String description;
@@ -67,9 +22,11 @@ public class Assignment {
     private Status scoreBoardStatus;
     private ArrayList<Question> questions;
     private ArrayList<Responder> responders;
+    private boolean automaticScoring;
 
     public Assignment(String name, String description, DateTime startDate, DateTime endDate,
-                      int delayCoefficient, DateTime delayDateTime, Status assignmentStatus, Status scoreBoardStatus) {
+                      int delayCoefficient, DateTime delayDateTime, Status assignmentStatus,
+                      Status scoreBoardStatus, boolean automaticScoring) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
@@ -80,6 +37,7 @@ public class Assignment {
         this.scoreBoardStatus = scoreBoardStatus;
         this.questions = new ArrayList<>();
         this.responders = new ArrayList<>();
+        this.automaticScoring = automaticScoring;
     }
 
     public String getName() {
@@ -147,11 +105,7 @@ public class Assignment {
     }
 
     public boolean addQuestion(Question question) {
-        if (!questions.contains(question)) {
-            questions.add(question);
-            return true;
-        }
-        return false;
+        return questions.add(question);
     }
 
     public boolean removeQuestion(Question question) {
@@ -217,5 +171,53 @@ public class Assignment {
     @Override
     public int hashCode() {
         return Objects.hash(name, description, startDate, endDate);
+    }
+
+    private class Responder implements Comparable<Responder> {
+        private String username;
+        private double totalScore;
+        private long averageSentTime;
+
+        public Responder(String username) {
+            this.username = username;
+        }
+
+        public double getTotalScore() {
+            return totalScore;
+        }
+
+        public void setTotalScore(double totalScore) {
+            this.totalScore = totalScore;
+        }
+
+        public long getAverageSentTime() {
+            return averageSentTime;
+        }
+
+        public void setAverageSentTime(long averageSentTime) {
+            this.averageSentTime = averageSentTime;
+        }
+
+        @Override
+        public int compareTo(Responder o) {
+            if (this.totalScore > o.totalScore) {
+                return 1;
+            }
+            if (this.totalScore < o.totalScore) {
+                return -1;
+            }
+            if (this.averageSentTime < o.averageSentTime) {
+                return 1;
+            }
+            if (this.averageSentTime > o.averageSentTime) {
+                return -1;
+            }
+            return 0;
+        }
+
+        @Override
+        public String toString() {
+            return username + " | " + totalScore + " | " + averageSentTime;
+        }
     }
 }

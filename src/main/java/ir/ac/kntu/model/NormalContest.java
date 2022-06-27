@@ -8,8 +8,9 @@ public class NormalContest extends Contest {
     private ArrayList<User> participants;
     private ArrayList<Responder> responders;
 
-    public NormalContest(String name, DateTime startDate, DateTime endDate, ArrayList<Question> questions) {
-        super(name, startDate, endDate, questions);
+    public NormalContest(User ownerAdmin, String name, DateTime startDate, DateTime endDate,
+                         ArrayList<Question> questions, boolean automaticScoring) {
+        super(ownerAdmin, name, startDate, endDate, questions, automaticScoring);
         this.participants = new ArrayList<>(50); //Maximum number of participants is 50 User
         this.responders = new ArrayList<>();
     }

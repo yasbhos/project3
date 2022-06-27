@@ -1,37 +1,40 @@
 package ir.ac.kntu.db;
 
-import ir.ac.kntu.model.Admin;
-import ir.ac.kntu.model.Admin;
+import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.Cipher;
 
 import java.util.ArrayList;
 
 public class AdminDB {
-    private ArrayList<Admin> admins;
+    private ArrayList<User> admins;
 
-    public AdminDB(ArrayList<Admin> admins) {
+    public AdminDB(ArrayList<User> admins) {
         this.admins = admins;
     }
 
-    public boolean addAdmin(Admin admin) {
+    public boolean addAdmin(User admin) {
         return admins.add(admin);
     }
 
-    public boolean removeAdmin(Admin admin) {
+    public boolean removeAdmin(User admin) {
         return admins.remove(admin);
     }
 
-    public boolean containsAdmin(Admin admin) {
+    public boolean containsAdmin(User admin) {
         return admins.contains(admin);
     }
 
-    public Admin getAdminByFirstName(String firstName) {
-        return admins.stream().filter(admin -> admin.getFirstName().equals(firstName)).findFirst().orElse(null);
+    public User getAdminByUsername(String username) {
+        return admins.stream().filter(admin -> admin.getUsername().equals(username)).findFirst().orElse(null);
     }
 
-    public Admin getAdminByFirstNameAndPassword(String firstName, String password) {
+    public User getAdminByUsernameAndPassword(String username, String password) {
         return admins.stream().filter(Admin ->
-                Admin.getFirstName().equals(firstName) && Admin.getHashedPassword().equals(Cipher.sha256(password))
+                Admin.getUsername().equals(username) && Admin.getHashedPassword().equals(Cipher.sha256(password))
         ).findFirst().orElse(null);
+    }
+
+    public boolean isUsernameUnique(String username) {
+        return getAdminByUsername(username) != null;
     }
 }

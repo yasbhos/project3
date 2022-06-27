@@ -29,41 +29,52 @@ public class ContestDB {
 
     public Contest getContestForAdmin() {
         for (Contest contest : contests) {
-            System.out.println("ID: " + contest.getId() +
-                    "Name: " + contest.getName());
+            System.out.println("Id: " + contest.getId() + "name: " + contest.getName());
         }
-        String id = ScannerWrapper.getInstance().readString("Enter contest id: ");
+        String id = ScannerWrapper.getInstance().readString("Enter contest Id: ");
+        Contest contest = getContestById(id);
+        if (contest == null) {
+            System.out.println("Invalid Id");
+            return null;
+        }
 
-        return getContestByID(id);
+        return contest;
     }
 
     public Contest getContestForUser(User currentUser) {
         for (Contest contest : contests) {
-            if (contest instanceof PrivateContest privateContest &&
-                    !privateContest.canParticipants(currentUser)) {
+            if (contest instanceof PrivateContest privateContest && !privateContest.canParticipant(currentUser)) {
                 continue;
             }
-            System.out.println("ID: " + contest.getId() +
-                    "Name: " + contest.getName());
+            System.out.println("Id: " + contest.getId() + "name: " + contest.getName());
         }
-        String id = ScannerWrapper.getInstance().readString("Enter contest id: ");
+        String id = ScannerWrapper.getInstance().readString("Enter contest Id: ");
+        Contest contest = getContestById(id);
+        if (contest == null) {
+            System.out.println("Invalid Id");
+            return null;
+        }
 
-        return getContestByID(id);
+        return contest;
     }
 
     public Contest getContestForGuest() {
         for (Contest contest : contests) {
-            if (contest.getEndDate().compareTo(DateTimeUtility.now()) > 0) {
-                System.out.println("ID: " + contest.getId() +
-                        "Name: " + contest.getName());
+            if (contest.getEndDate().compareTo(DateTimeUtility.now()) < 0) {
+                System.out.println("Id: " + contest.getId() + "name: " + contest.getName());
             }
         }
-        String id = ScannerWrapper.getInstance().readString("Enter contest id: ");
+        String id = ScannerWrapper.getInstance().readString("Enter contest Id: ");
+        Contest contest = getContestById(id);
+        if (contest == null) {
+            System.out.println("Invalid Id");
+            return null;
+        }
 
-        return getContestByID(id);
+        return contest;
     }
 
-    public Contest getContestByID(String id) {
+    public Contest getContestById(String id) {
         return contests.stream().filter(contest -> contest.getId().equals(id)).findFirst().orElse(null);
     }
 }

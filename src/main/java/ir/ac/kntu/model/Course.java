@@ -9,7 +9,9 @@ import java.util.Objects;
 
 public class Course {
     public enum CourseStatus {
-        OPEN_PUBLIC, OPEN_PRIVATE, CLOSE
+        OPEN_PUBLIC,
+        OPEN_PRIVATE,
+        CLOSE
     }
 
     private String id;
@@ -22,19 +24,21 @@ public class Course {
     private String description;
     private ArrayList<User> register;
     private ArrayList<Assignment> assignments;
+    private ArrayList<User> teacherAssistants;
 
-    public Course(String name, String institute, User lecturer, DateTime startDate, CourseStatus status,
+    public Course(User owner, String name, String institute, DateTime startDate, CourseStatus status,
                   String password, String description) {
         this.id = IdGenerator.createID();
         this.name = name;
         this.institute = institute;
-        this.lecturer = lecturer;
         this.startDate = startDate;
         this.status = status;
         this.hashedPassword = Cipher.sha256(password);
         this.description = description;
         this.register = new ArrayList<>();
         this.assignments = new ArrayList<>();
+        this.teacherAssistants = new ArrayList<>();
+        this.teacherAssistants.add(owner);
     }
 
     public String getId() {
@@ -85,8 +89,8 @@ public class Course {
         return hashedPassword;
     }
 
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+    public void setPassword(String password) {
+        this.hashedPassword = Cipher.sha256(password);
     }
 
     public String getDescription() {
@@ -98,11 +102,7 @@ public class Course {
     }
 
     public boolean addStudent(User student) {
-        if (!register.contains(student)) {
-            register.add(student);
-            return true;
-        }
-        return false;
+        return register.add(student);
     }
 
     public boolean removeStudent(User student) {
@@ -114,11 +114,7 @@ public class Course {
     }
 
     public boolean addAssignment(Assignment assignment) {
-        if (!assignments.contains(assignment)) {
-            assignments.add(assignment);
-            return true;
-        }
-        return false;
+        return assignments.add(assignment);
     }
 
     public boolean removeAssignment(Assignment assignment) {
@@ -129,12 +125,38 @@ public class Course {
         for (int i = 0; i < assignments.size(); i++) {
             System.out.println(i + 1 + ". " + assignments.get(i).getName());
         }
+
         int index = ScannerWrapper.getInstance().readInt("Enter assignment index: ");
         if (index > 0 && index <= assignments.size()) {
             return assignments.get(index - 1);
         }
-        System.out.println(); //TODO
+        System.out.println("Invalid option");
+
         return null;
+    }
+
+    public boolean instanceofLecturer(User user) {
+        return this.lecturer.equals(user);
+    }
+
+    public boolean instanceofTA(User user) {
+        for (User ta : teacherAssistants) {
+            if (ta.equals(user)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean instanceofStudent(User user) {
+        for (User student : register) {
+            if (student.equals(user)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
