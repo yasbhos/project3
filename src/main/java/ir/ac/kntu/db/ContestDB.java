@@ -29,7 +29,7 @@ public class ContestDB {
 
     public Contest getContestForAdmin() {
         for (Contest contest : contests) {
-            System.out.println("Id: " + contest.getId() + "name: " + contest.getName());
+            System.out.println("Id: " + contest.getId() + ", Name: " + contest.getName());
         }
         String id = ScannerWrapper.getInstance().readString("Enter contest Id: ");
         Contest contest = getContestById(id);
@@ -46,7 +46,7 @@ public class ContestDB {
             if (contest instanceof PrivateContest privateContest && !privateContest.canParticipant(currentUser)) {
                 continue;
             }
-            System.out.println("Id: " + contest.getId() + "name: " + contest.getName());
+            System.out.println("Id: " + contest.getId() + ", Name: " + contest.getName());
         }
         String id = ScannerWrapper.getInstance().readString("Enter contest Id: ");
         Contest contest = getContestById(id);
@@ -60,8 +60,8 @@ public class ContestDB {
 
     public Contest getContestForGuest() {
         for (Contest contest : contests) {
-            if (contest.getEndDate().compareTo(DateTimeUtility.now()) < 0) {
-                System.out.println("Id: " + contest.getId() + "name: " + contest.getName());
+            if (contest.getEndDateTime().compareTo(DateTimeUtility.now()) < 0) {
+                System.out.println("Id: " + contest.getId() + ", Name: " + contest.getName());
             }
         }
         String id = ScannerWrapper.getInstance().readString("Enter contest Id: ");

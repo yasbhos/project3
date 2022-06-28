@@ -72,7 +72,7 @@ public class ScannerWrapper {
     }
 
     private <T extends Enum<T>> T scanOption(T[] options) {
-        int userInput = ScannerWrapper.getInstance().nextInt();
+        int userInput = nextInt();
         userInput--;
         if (userInput >= 0 && userInput < options.length) {
             return options[userInput];

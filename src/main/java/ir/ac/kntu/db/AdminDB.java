@@ -35,6 +35,6 @@ public class AdminDB {
     }
 
     public boolean isUsernameUnique(String username) {
-        return getAdminByUsername(username) != null;
+        return getAdminByUsername(username) == null;
     }
 }

@@ -22,14 +22,14 @@ public class Question {
         VERY_HARD
     }
 
-    private String id;
+    private final String id;
     private String name;
     private double score;
     private String description;
     private QuestionType type;
     private QuestionLevel level;
     private DateTime uploadDateTime;
-    private ArrayList<Responder> responders;
+    private final ArrayList<Responder> responders;
 
     public Question(String name, double score, String description, QuestionType type, QuestionLevel level) {
         this.id = IdGenerator.createID();
@@ -90,10 +90,6 @@ public class Question {
         return uploadDateTime;
     }
 
-    public void setUploadDateTime(DateTime uploadDateTime) {
-        this.uploadDateTime = uploadDateTime;
-    }
-
     public void addAnswer(User user, Answer answer) {
         for (Responder responder : responders) {
             if (responder.username.equals(user.getUsername())) {
@@ -117,16 +113,13 @@ public class Question {
     }
 
     public Answer readAnswer(User user, String message) {
-        System.out.println(message);
-        String description = ScannerWrapper.getInstance().readString("Enter answer: ");
-
+        String description = ScannerWrapper.getInstance().readString(message);
         return new Answer(description, this, user.getUsername());
     }
 
     public Question deppCopy() {
         Question question = new Question(this.name, this.score, this.description, this.type, this.level);
         question.uploadDateTime = this.uploadDateTime;
-
         return question;
     }
 
@@ -147,22 +140,20 @@ public class Question {
         if (this == o) {
             return true;
         }
-        if (o != null && !(o instanceof Question)) {
-            Question question = (Question) o;
-            return Double.compare(question.score, score) == 0 && Objects.equals(name, question.name) && Objects.equals(description, question.description) && type == question.type && level == question.level;
-        } else {
+        if (!(o instanceof Question question)) {
             return false;
         }
+        return Objects.equals(id, question.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, score, description, type, level);
+        return Objects.hash(id);
     }
 
     private class Responder {
-        private String username;
-        private ArrayList<Answer> sentAnswers;
+        private final String username;
+        private final ArrayList<Answer> sentAnswers;
 
         public Responder(String username) {
             this.username = username;

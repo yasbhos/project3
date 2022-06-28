@@ -3,44 +3,77 @@ package ir.ac.kntu.model;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class ChoiceOneQuestion extends Question {
-    public enum Choices {
-        A, B, C, D
+    private class Choices {
+        private String a, b, c, d;
+
+        public Choices(String a, String b, String c, String d) {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
+        }
+
+        public String getA() {
+            return a;
+        }
+
+        public String getB() {
+            return b;
+        }
+
+        public String getC() {
+            return c;
+        }
+
+        public String getD() {
+            return d;
+        }
     }
 
-    private Choices correctAnswer;
+    private Choices choices;
+    private String correctAnswer;
 
     public ChoiceOneQuestion(String name, double score, String description, QuestionType type, QuestionLevel level,
-                             Choices correctAnswer) {
+                             String a, String b, String c, String d, String correctAnswer) {
         super(name, score, description, type, level);
+        this.choices = new Choices(a, b, c, d);
         this.correctAnswer = correctAnswer;
     }
 
-    public Choices getCorrectOption() {
+    public String getCorrectAnswer() {
         return correctAnswer;
-    }
-
-    public void setCorrectAnswer(Choices correctAnswer) {
-        this.correctAnswer = correctAnswer;
     }
 
     @Override
     public Answer readAnswer(User user, String message) {
+        //TODO: make this function clear and more readable
         System.out.println(message);
-        Choices answer = ScannerWrapper.getInstance().readEnum(Choices.values(), "Choices");
+        enum Option {
+            A, B, C, D
+        }
 
-        return new Answer(user.getUsername(), this, answer.toString());
+        Option option = ScannerWrapper.getInstance().readEnum(Option.values(), "", "Enter correct option");
+        return switch (option) {
+            case A ->  new Answer("A", this, user.getUsername());
+            case B ->  new Answer("B", this, user.getUsername());
+            case C ->  new Answer("C", this, user.getUsername());
+            case D ->  new Answer("D", this, user.getUsername());
+        };
     }
 
     @Override
     public String toString() {
+        //TODO: make this function clear and more readable
         String questionToString = "Question{" +
                 "name='" + super.getName() + '\'' +
                 ", score=" + super.getScore() +
                 "\ndescription='" + super.getDescription() + "'\n";
 
-        for (Choices choices : Choices.values()) {
-            questionToString += choices + "\n";
-        }
+        questionToString += "Options:\n";
+        questionToString += choices.getA() + "\n";
+        questionToString += choices.getB() + "\n";
+        questionToString += choices.getC() + "\n";
+        questionToString += choices.getD() + "\n";
 
         questionToString += "type=" + super.getType() +
                 ", level=" + super.getLevel() +

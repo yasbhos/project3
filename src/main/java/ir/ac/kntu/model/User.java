@@ -103,7 +103,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "admin='" + admin + '\'' +
-                "firstName='" + firstName + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -118,16 +118,14 @@ public class User {
         if (this == o) {
             return true;
         }
-        if (o == null || !(o instanceof User)) {
+        if (!(o instanceof User user)) {
             return false;
         }
-        User user = (User) o;
-
-        return Objects.equals(username, user.username) && Objects.equals(nationalCode, user.nationalCode);
+        return Objects.equals(username, user.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, nationalCode);
+        return Objects.hash(username);
     }
 }

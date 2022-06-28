@@ -59,5 +59,6 @@ public class AdminContestMenu implements Menu {
 
         System.out.println(contest);
         AdminContestSubMenu adminContestSubMenu = new AdminContestSubMenu(currentAdmin, contest, userDB);
+        adminContestSubMenu.menu();
     }
 }

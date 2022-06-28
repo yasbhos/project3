@@ -1,17 +1,16 @@
 package ir.ac.kntu.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class NormalContest extends Contest {
     private static final int MAXIMUM_PARTICIPANTS = 50;
+    private final ArrayList<User> participants;
+    private final ArrayList<Responder> responders;
 
-    private ArrayList<User> participants;
-    private ArrayList<Responder> responders;
-
-    public NormalContest(User ownerAdmin, String name, DateTime startDate, DateTime endDate,
-                         ArrayList<Question> questions, boolean automaticScoring) {
-        super(ownerAdmin, name, startDate, endDate, questions, automaticScoring);
-        this.participants = new ArrayList<>(50); //Maximum number of participants is 50 User
+    public NormalContest(User ownerAdmin, String name, DateTime startDateTime, DateTime endDateTime, ArrayList<Question> questions) {
+        super(ownerAdmin, name, startDateTime, endDateTime, questions);
+        this.participants = new ArrayList<>();
         this.responders = new ArrayList<>();
     }
 
@@ -28,21 +27,56 @@ public class NormalContest extends Contest {
         return participants.remove(participant);
     }
 
-    private class Responder {
-        private String username;
-        private ArrayList<Answer> sentAnswers;
+    @Override
+    public void scoreBoard() {
+        Collections.sort(responders);
+        System.out.println("Scoreboard for " + super.getName());
+        System.out.println("------------------------------------------------------------");
+        System.out.println("| Name of user | Total Mark | Average Time");
+        responders.forEach(System.out::println);
+        System.out.println("------------------------------------------------------------");
+    }
+
+    private class Responder implements Comparable<Responder> {
+        private final String username;
+        private double totalScore;
+        //TODO: think about this field, really long? It can be DateTime!
+        private long averageSentTime;
 
         public Responder(String username) {
             this.username = username;
-            this.sentAnswers = new ArrayList<>();
         }
 
-        public boolean addAnswer(Answer answer) {
-            return sentAnswers.add(answer);
+        public double getTotalScore() {
+            return totalScore;
         }
 
-        public double getScore() {
-            return sentAnswers.get(sentAnswers.size() - 1).getScore();
+        public void setTotalScore(double totalScore) {
+            this.totalScore = totalScore;
+        }
+
+        public long getAverageSentTime() {
+            return averageSentTime;
+        }
+
+        public void setAverageSentTime(long averageSentTime) {
+            this.averageSentTime = averageSentTime;
+        }
+
+        @Override
+        public int compareTo(Responder o) {
+            if (this.totalScore > o.totalScore) {
+                return 1;
+            }
+            if (this.totalScore < o.totalScore) {
+                return -1;
+            }
+            return Long.compare(o.averageSentTime, this.averageSentTime);
+        }
+
+        @Override
+        public String toString() {
+            return username + " | " + totalScore + " | " + averageSentTime;
         }
     }
 }

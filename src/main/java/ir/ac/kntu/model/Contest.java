@@ -4,25 +4,26 @@ import ir.ac.kntu.util.IdGenerator;
 import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Contest {
-    private User ownerAdmin;
-    private String id;
+    private final User ownerAdmin;
+    private final String id;
     private String name;
-    private DateTime startDate;
-    private DateTime endDate;
-    private ArrayList<Question> questions;
+    private DateTime startDateTime;
+    private DateTime endDateTime;
+    private final ArrayList<Question> questions;
     private boolean automaticScoring;
 
-    public Contest(User ownerAdmin, String name, DateTime startDate, DateTime endDate,
-                   ArrayList<Question> questions, boolean automaticScoring) {
+    public Contest(User ownerAdmin, String name, DateTime startDateTime, DateTime endDateTime,
+                   ArrayList<Question> questions) {
         this.ownerAdmin = ownerAdmin;
         this.id = IdGenerator.createID();
         this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
         this.questions = questions;
-        this.automaticScoring = automaticScoring;
+        this.automaticScoring = true;
     }
 
     public User getOwnerAdmin() {
@@ -41,20 +42,20 @@ public class Contest {
         this.name = name;
     }
 
-    public DateTime getStartDate() {
-        return startDate;
+    public DateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setStartDate(DateTime startDate) {
-        this.startDate = startDate;
+    public void setStartDateTime(DateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public DateTime getEndDate() {
-        return endDate;
+    public DateTime getEndDateTime() {
+        return endDateTime;
     }
 
-    public void setEndDate(DateTime endDate) {
-        this.endDate = endDate;
+    public void setEndDateTime(DateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
     public boolean addQuestion(Question question) {
@@ -73,13 +74,13 @@ public class Contest {
         this.automaticScoring = automaticScoring;
     }
 
-    public Question getQuestion() {
+    public Question searchQuestion() {
         for (Question question : questions) {
             System.out.println("ID: " + question.getId() +
-                    "Name: " + question.getName() +
-                    "Level: " + question.getLevel() +
-                    "Type: " + question.getType() +
-                    "Score: " + question.getScore());
+                    ", Name: " + question.getName() +
+                    ", Level: " + question.getLevel() +
+                    ", Type: " + question.getType() +
+                    ", Score: " + question.getScore());
         }
 
         String id = ScannerWrapper.getInstance().readString("Enter question ID: ");
@@ -93,28 +94,39 @@ public class Contest {
     }
 
     public void scoreBoard() {
-        System.out.println("Scoreboard for " + this.name);
-        System.out.println("------------------------------------------------------------");
-        System.out.println("| Participant name | Mark |");
-        //TODO
-        System.out.println("------------------------------------------------------------");
+        //TODO: check here
     }
 
     @Override
     public String toString() {
         StringBuilder contestToString = new StringBuilder("Contest{" +
                 "name='" + name + '\'' +
-                "\nstartDate=" + startDate +
-                "\nendDate=" + endDate);
+                "\nstartDateTime=" + startDateTime +
+                "\nendDateTime=" + endDateTime);
 
-        contestToString.append("Questions\n");
-        for (Question question :
-                questions) {
+        contestToString.append("\nQuestions\n");
+        for (Question question : questions) {
             contestToString.append(question.getName()).append("\n");
         }
 
-        contestToString.append("\n}");
+        contestToString.append("}");
 
         return contestToString.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Contest contest)) {
+            return false;
+        }
+        return Objects.equals(id, contest.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

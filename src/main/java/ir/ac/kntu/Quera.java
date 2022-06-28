@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ir.ac.kntu.db.*;
 import ir.ac.kntu.menu.login.LoginMenu;
 import ir.ac.kntu.model.*;
+import ir.ac.kntu.util.ScannerWrapper;
 
 public class Quera {
     private LoginMenu loginMenu;
@@ -12,6 +13,7 @@ public class Quera {
     public void start() {
         initial();
         loginMenu.menu();
+        ScannerWrapper.getInstance().close();
     }
 
     private void initial() {
@@ -26,23 +28,22 @@ public class Quera {
         userDB.addUser(user);
 
         CourseDB courseDB = new CourseDB(new ArrayList<>());
-        DateTime startDate = new DateTime(1400, 11, 18, 0, 1, 1);
+        DateTime startDate = new DateTime(1400, 11, 18, 0, 0, 0);
         Course course = new Course(user, "AP", "KNTU", startDate, Course.CourseStatus.OPEN_PRIVATE,
                 "2126", "Advanced Programming with Java language");
         courseDB.addCourse(course);
 
         ContestDB contestDB = new ContestDB(new ArrayList<>());
-        startDate = new DateTime(1401, 4, 15, 0, 1, 1);
-        DateTime endDate = new DateTime(1401, 4, 18, 0, 1, 1);
-        Contest normalContest = new NormalContest(admin, "CodeCup4", startDate,
-                endDate, new ArrayList<>(), true);
+        startDate = new DateTime(1401, 4, 15, 0, 0, 0);
+        DateTime endDate = new DateTime(1401, 4, 18, 0, 0, 0);
+        Contest normalContest = new NormalContest(admin, "CodeCup4", startDate, endDate, new ArrayList<>());
         contestDB.addContest(normalContest);
 
         QuestionDB questionDB = new QuestionDB(new ArrayList<>());
         Question question = new ChoiceOneQuestion("Test", 25,
-                "Select the word that is not one of the OOP pillars:\nA)interface \nB) inheritance\nC) encapsulation\nD) polymorphism",
-                Question.QuestionType.CHOICE_ONE, Question.QuestionLevel.EASY, ChoiceOneQuestion.Choices.A);
-
+                "Select the word that is not one of the OOP pillars:",
+                Question.QuestionType.CHOICE_ONE, Question.QuestionLevel.EASY, "interface", "inheritance",
+                "encapsulation", "polymorphism", "A");
         questionDB.addQuestion(question);
 
         loginMenu = new LoginMenu(adminDB, userDB, courseDB, contestDB, questionDB);

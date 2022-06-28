@@ -87,19 +87,19 @@ public class UserMainMenu implements Menu {
         }
 
         System.out.println(course);
-        if (course.instanceofStudent(currentUser)) {
+        if (course.isStudent(currentUser)) {
             StudentCourseMenu studentCourseMenu = new StudentCourseMenu(currentUser, course);
             studentCourseMenu.menu();
             return;
         }
 
-        if (course.instanceofTA(currentUser)) {
+        if (course.isfTA(currentUser)) {
             TACourseMenu taCourseMenu = new TACourseMenu(currentUser, course, userDB, questionDB);
             taCourseMenu.menu();
             return;
         }
 
-        if (course.instanceofLecturer(currentUser)) {
+        if (course.isLecturer(currentUser)) {
             LecturerCourseMenu lecturerCourseMenu = new LecturerCourseMenu(currentUser, course, userDB, questionDB);
             lecturerCourseMenu.menu();
         }
@@ -161,7 +161,7 @@ public class UserMainMenu implements Menu {
         }
 
         System.out.println(contest);
-        UserContestMenu userContestMenu = new UserContestMenu(currentUser, contestDB);
+        UserContestMenu userContestMenu = new UserContestMenu(currentUser, contest);
         userContestMenu.menu();
     }
 
@@ -210,7 +210,7 @@ public class UserMainMenu implements Menu {
         if (contest == null) {
             return false;
         }
-        if (contest.getStartDate().compareTo(DateTimeUtility.now()) < 0) {
+        if (DateTimeUtility.now().compareTo(contest.getStartDateTime()) < 0) {
             System.out.println("The registration deadline has passed");
             return false;
         }

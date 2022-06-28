@@ -10,6 +10,7 @@ public enum AdminMainMenuOption {
 
     public enum UsersSubMenu {
         LIST_OF_USERS,
+        ADD_NEW_ADMIN,
         BACK
     }
 

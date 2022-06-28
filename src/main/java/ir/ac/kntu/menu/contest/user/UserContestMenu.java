@@ -1,18 +1,19 @@
 package ir.ac.kntu.menu.contest.user;
 
-import ir.ac.kntu.db.ContestDB;
 import ir.ac.kntu.menu.Menu;
+import ir.ac.kntu.menu.question.user.UserQuestionMenu;
 import ir.ac.kntu.model.Contest;
+import ir.ac.kntu.model.Question;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class UserContestMenu implements Menu {
     private User currentUser;
-    private ContestDB contestDB;
+    private Contest contest;
 
-    public UserContestMenu(User currentUser, ContestDB contestDB) {
+    public UserContestMenu(User currentUser, Contest contest) {
         this.currentUser = currentUser;
-        this.contestDB = contestDB;
+        this.contest = contest;
     }
 
     @Override
@@ -20,7 +21,7 @@ public class UserContestMenu implements Menu {
         UserContestMenuOption userContestMenuOption;
         do {
             userContestMenuOption = ScannerWrapper.getInstance().readEnum(UserContestMenuOption.values(),
-                    "USER CONTEST MENU");
+                    "CONTEST MENU");
             handleTheOption(userContestMenuOption);
         } while (userContestMenuOption != UserContestMenuOption.BACK);
     }
@@ -28,20 +29,20 @@ public class UserContestMenu implements Menu {
     @Override
     public <T extends Enum<T>> void handleTheOption(T option) {
         switch ((UserContestMenuOption) option) {
-            case LIST_OF_CONTESTS -> listOfContest();
+            case LIST_OF_QUESTIONS -> listOfQuestions();
+            case SCOREBOARD -> contest.scoreBoard();
             default -> {
             }
         }
     }
 
-    private void listOfContest() {
-        Contest contest = contestDB.getContestForUser(currentUser);
-        if (contest == null) {
+    public void listOfQuestions() {
+        Question question = contest.searchQuestion();
+        if (question == null) {
             return;
         }
 
-        System.out.println(contest);
-        ContestSubMenu contestSubMenu = new ContestSubMenu(currentUser, contest);
-        contestSubMenu.menu();
+        UserQuestionMenu userQuestionMenu = new UserQuestionMenu(currentUser, question);
+        userQuestionMenu.menu();
     }
 }

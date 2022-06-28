@@ -3,20 +3,18 @@ package ir.ac.kntu.model;
 import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class SpecialContest extends Contest {
     private static final int MAXIMUM_PARTICIPANTS = 100;
-
     private int maximumGroupsCapacity;
-    private ArrayList<Group> groups;
-    private ArrayList<Responder> responders;
+    private final ArrayList<Group> groups;
 
-    public SpecialContest(User ownerAdmin, String name, DateTime startDate, DateTime endDate, ArrayList<Question> questions,
-                          int maximumGroupCapacity, boolean automaticScoring) {
-        super(ownerAdmin, name, startDate, endDate, questions, automaticScoring);
+    public SpecialContest(User ownerAdmin, String name, DateTime startDateTime, DateTime endDateTime, ArrayList<Question> questions,
+                          int maximumGroupCapacity) {
+        super(ownerAdmin, name, startDateTime, endDateTime, questions);
         this.maximumGroupsCapacity = maximumGroupCapacity;
         this.groups = new ArrayList<>();
-        this.responders = new ArrayList<>();
     }
 
     public int getMaximumGroupsCapacity() {
@@ -29,16 +27,13 @@ public class SpecialContest extends Contest {
 
     public boolean addGroup(String name, ArrayList<User> members) {
         if ((groups.size() + 1) * maximumGroupsCapacity >= MAXIMUM_PARTICIPANTS) {
+            System.out.println("The capacity is full");
             return false;
         }
 
-        Group group = new Group(name, maximumGroupsCapacity, members);
+        Group group = new Group(name, members);
 
         return groups.add(group);
-    }
-
-    public boolean removeGroup(Group group) {
-        return groups.remove(group);
     }
 
     public boolean addParticipantToExistingGroup(User participant) {
@@ -59,21 +54,76 @@ public class SpecialContest extends Contest {
         return false;
     }
 
-    private class Responder {
-        private String groupName;
-        private ArrayList<Answer> sentAnswers;
+    @Override
+    public void scoreBoard() {
+        Collections.sort(groups);
+        System.out.println("Scoreboard for " + super.getName());
+        System.out.println("------------------------------------------------------------");
+        System.out.println("| Group name | Total Mark | Average Time");
+        groups.forEach(System.out::println);
+        System.out.println("------------------------------------------------------------");
+    }
 
-        public Responder(String groupName) {
-            this.groupName = groupName;
-            this.sentAnswers = new ArrayList<>();
+    private class Group implements Comparable<Group> {
+        private String name;
+        private final ArrayList<User> members;
+        private int totalScore;
+        private int ranking;
+        //TODO: think about this field, really long? It can be DateTime!
+        private long averageSentTime;
+
+        public Group(String name, ArrayList<User> members) {
+            this.name = name;
+            this.members = members;
         }
 
-        public boolean addAnswer(Answer answer) {
-            return sentAnswers.add(answer);
+        public String getName() {
+            return name;
         }
 
-        public double getScore() {
-            return sentAnswers.get(sentAnswers.size() - 1).getScore();
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public boolean addMember(User member) {
+            return members.add(member);
+        }
+
+        public int getTotalScore() {
+            return totalScore;
+        }
+
+        public void setTotalScore(int totalScore) {
+            this.totalScore = totalScore;
+        }
+
+        public int getRanking() {
+            return ranking;
+        }
+
+        public void setRanking(int ranking) {
+            this.ranking = ranking;
+        }
+
+        public long getAverageSentTime() {
+            return averageSentTime;
+        }
+
+        public void setAverageSentTime(long averageSentTime) {
+            this.averageSentTime = averageSentTime;
+        }
+
+        @Override
+        public int compareTo(Group o) {
+            if (this.totalScore > o.totalScore) {
+                return 1;
+            }
+            return Long.compare(o.averageSentTime, this.averageSentTime);
+        }
+
+        @Override
+        public String toString() {
+            return name + " | " + totalScore + " | " + averageSentTime;
         }
     }
 }

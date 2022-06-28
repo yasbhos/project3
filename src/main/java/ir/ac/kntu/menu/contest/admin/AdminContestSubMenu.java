@@ -91,7 +91,7 @@ public class AdminContestSubMenu implements Menu {
             return;
         }
 
-        contest.setStartDate(dateTime);
+        contest.setStartDateTime(dateTime);
     }
 
     public void editEndDateTime() {
@@ -100,7 +100,7 @@ public class AdminContestSubMenu implements Menu {
             return;
         }
 
-        contest.setEndDate(dateTime);
+        contest.setEndDateTime(dateTime);
     }
 
     public void editAutomaticScoring() {

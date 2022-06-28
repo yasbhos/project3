@@ -3,7 +3,7 @@ package ir.ac.kntu.model;
 import ir.ac.kntu.util.DateTimeUtility;
 
 public class Answer {
-    private String description;
+    private String answer;
     private Question question;
     private DateTime sentDateTime;
     private String senderUsername;
@@ -11,19 +11,19 @@ public class Answer {
     private double score;
     private double scoreWithDelay;
 
-    public Answer(String description, Question question, String senderUsername) {
-        this.description = description;
+    public Answer(String answer, Question question, String senderUsername) {
+        this.answer = answer;
         this.question = question;
         this.senderUsername = senderUsername;
         this.sentDateTime = DateTimeUtility.now();
     }
 
-    public String getDescription() {
-        return description;
+    public String getAnswer() {
+        return answer;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
     public Question getQuestion() {
@@ -77,13 +77,13 @@ public class Answer {
     @Override
     public String toString() {
         return "Answer{" +
-                "description:\n'" + description + '\'' +
-                "\n, question=" + question +
-                "\n, sentDateTime=" + sentDateTime +
-                "\n, senderUsername='" + senderUsername + '\'' +
-                "\n, delayCoefficient=" + delayCoefficient +
+                "answer:\n'" + answer + '\'' +
+                "\nquestion=" + question +
+                "\nsentDateTime=" + sentDateTime +
+                "\nsenderUsername='" + senderUsername + '\'' +
+                ", delayCoefficient=" + delayCoefficient +
                 ", score=" + score +
                 ", scoreWithDelay=" + scoreWithDelay +
-                '}';
+                "\n}";
     }
 }

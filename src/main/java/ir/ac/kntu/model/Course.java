@@ -14,7 +14,7 @@ public class Course {
         CLOSE
     }
 
-    private String id;
+    private final String id;
     private String name;
     private String institute;
     private User lecturer;
@@ -22,9 +22,9 @@ public class Course {
     private CourseStatus status;
     private String hashedPassword;
     private String description;
-    private ArrayList<User> register;
-    private ArrayList<Assignment> assignments;
-    private ArrayList<User> teacherAssistants;
+    private final ArrayList<User> register;
+    private final ArrayList<Assignment> assignments;
+    private final ArrayList<User> teacherAssistants;
 
     public Course(User owner, String name, String institute, DateTime startDate, CourseStatus status,
                   String password, String description) {
@@ -121,7 +121,7 @@ public class Course {
         return assignments.remove(assignment);
     }
 
-    public Assignment searchAssignmentByName() {
+    public Assignment searchAssignment() {
         for (int i = 0; i < assignments.size(); i++) {
             System.out.println(i + 1 + ". " + assignments.get(i).getName());
         }
@@ -135,28 +135,20 @@ public class Course {
         return null;
     }
 
-    public boolean instanceofLecturer(User user) {
+    public boolean isLecturer(User user) {
+        if (this.lecturer == null) {
+            return false;
+        }
+
         return this.lecturer.equals(user);
     }
 
-    public boolean instanceofTA(User user) {
-        for (User ta : teacherAssistants) {
-            if (ta.equals(user)) {
-                return true;
-            }
-        }
-
-        return false;
+    public boolean isfTA(User user) {
+        return teacherAssistants.contains(user);
     }
 
-    public boolean instanceofStudent(User user) {
-        for (User student : register) {
-            if (student.equals(user)) {
-                return true;
-            }
-        }
-
-        return false;
+    public boolean isStudent(User user) {
+        return register.contains(user);
     }
 
     @Override
@@ -165,7 +157,7 @@ public class Course {
                 "name='" + name + '\'' +
                 ", institute='" + institute + '\'' +
                 ", lecturer=" + lecturer +
-                "\nstartDate: " + startDate +
+                "\nstartDate=" + startDate +
                 "\nstatus=" + status +
                 "\ndescription='" + description + '\'' +
                 "\n}";
@@ -176,16 +168,14 @@ public class Course {
         if (this == o) {
             return true;
         }
-        if (o == null || !(o instanceof Course)) {
+        if (!(o instanceof Course course)) {
             return false;
         }
-        Course course = (Course) o;
-
-        return Objects.equals(name, course.name) && Objects.equals(institute, course.institute) && Objects.equals(lecturer, course.lecturer) && Objects.equals(startDate, course.startDate);
+        return Objects.equals(id, course.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, institute, lecturer, startDate);
+        return Objects.hash(id);
     }
 }

@@ -14,23 +14,23 @@ public class Assignment {
 
     private String name;
     private String description;
-    private DateTime startDate;
-    private DateTime endDate;
+    private DateTime startDateTime;
+    private DateTime endDateTime;
     private int delayCoefficient;
     private DateTime delayDateTime;
     private Status assignmentStatus;
     private Status scoreBoardStatus;
-    private ArrayList<Question> questions;
-    private ArrayList<Responder> responders;
+    private final ArrayList<Question> questions;
+    private final ArrayList<Responder> responders;
     private boolean automaticScoring;
 
-    public Assignment(String name, String description, DateTime startDate, DateTime endDate,
+    public Assignment(String name, String description, DateTime startDateTime, DateTime endDateTime,
                       int delayCoefficient, DateTime delayDateTime, Status assignmentStatus,
                       Status scoreBoardStatus, boolean automaticScoring) {
         this.name = name;
         this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
         this.delayCoefficient = delayCoefficient;
         this.delayDateTime = delayDateTime;
         this.assignmentStatus = assignmentStatus;
@@ -56,20 +56,20 @@ public class Assignment {
         this.description = description;
     }
 
-    public DateTime getStartDate() {
-        return startDate;
+    public DateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setStartDate(DateTime startDate) {
-        this.startDate = startDate;
+    public void setStartDateTime(DateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public DateTime getEndDate() {
-        return endDate;
+    public DateTime getEndDateTime() {
+        return endDateTime;
     }
 
-    public void setEndDate(DateTime endDate) {
-        this.endDate = endDate;
+    public void setEndDateTime(DateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
     public int getDelayCoefficient() {
@@ -104,6 +104,14 @@ public class Assignment {
         this.scoreBoardStatus = scoreBoardStatus;
     }
 
+    public boolean isAutomaticScoring() {
+        return automaticScoring;
+    }
+
+    public void setAutomaticScoring(boolean automaticScoring) {
+        this.automaticScoring = automaticScoring;
+    }
+
     public boolean addQuestion(Question question) {
         return questions.add(question);
     }
@@ -112,15 +120,22 @@ public class Assignment {
         return questions.remove(question);
     }
 
-    public Question searchQuestionByName() {
-        for (int i = 0; i < questions.size(); i++) {
-            System.out.println(i + 1 + ". " + questions.get(i).getName());
+    public Question searchQuestion() {
+        for (Question question : questions) {
+            System.out.println("ID: " + question.getId() +
+                    ", Name: " + question.getName() +
+                    ", Level: " + question.getLevel() +
+                    ", Type: " + question.getType() +
+                    ", Score: " + question.getScore());
         }
-        int index = ScannerWrapper.getInstance().readInt("Enter question index: ");
-        if (index > 0 && index <= questions.size()) {
-            return questions.get(index - 1);
+
+        String id = ScannerWrapper.getInstance().readString("Enter question ID: ");
+        for (Question question : questions) {
+            if (question.getId().equals(id)) {
+                return question;
+            }
         }
-        System.out.println(); //TODO
+
         return null;
     }
 
@@ -129,31 +144,42 @@ public class Assignment {
         System.out.println("Scoreboard for " + this.name);
         System.out.println("------------------------------------------------------------");
         System.out.println("| Student name | Mark | Average Time");
-        for (Responder responder : responders) {
-            System.out.println(responder);
-        }
+        responders.forEach(System.out::println);
         System.out.println("------------------------------------------------------------");
     }
 
     public void registerMarkToFinalSent() {
         System.out.println("Register mark to final sent for " + this.name);
         System.out.println("------------------------------------------------------------");
-        //TODO
+        //TODO: implement this method
         System.out.println("------------------------------------------------------------");
+    }
+
+    public void automaticScoring() {
+        if (!automaticScoring) {
+            return;
+        }
+
+        //TODO: implement this method
     }
 
     @Override
     public String toString() {
-        return "Assignment{" +
+        StringBuilder assignmentToString = new StringBuilder("Assignment{" +
                 "name='" + name + '\'' +
-                "\n, description='" + description + '\'' +
-                "\n, startDate=" + startDate +
-                "\n, endDate=" + endDate +
-                ", delayCoefficient=" + delayCoefficient +
-                ", delayDateTime=" + delayDateTime +
-                "\n, assignmentStatus=" + assignmentStatus +
-                ", scoreBoardStatus=" + scoreBoardStatus +
-                '}';
+                "\ndescription='" + description + '\'' +
+                "\nstartDateTime=" + startDateTime +
+                "\nendDateTime=" + endDateTime +
+                "\ndelayCoefficient=" + delayCoefficient +
+                "\ndelayDateTime=" + delayDateTime);
+
+        for (Question question : questions) {
+            assignmentToString.append(question.getName());
+        }
+
+        assignmentToString.append("\nassignmentStatus=").append(assignmentStatus).append(", scoreBoardStatus=").append(scoreBoardStatus).append("\n}");
+
+        return assignmentToString.toString();
     }
 
     @Override
@@ -161,21 +187,21 @@ public class Assignment {
         if (this == o) {
             return true;
         }
-        if (o == null || !(o instanceof Assignment)) {
+        if (!(o instanceof Assignment that)) {
             return false;
         }
-        Assignment that = (Assignment) o;
-        return Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
+        return Objects.equals(name, that.name) && Objects.equals(startDateTime, that.startDateTime) && Objects.equals(endDateTime, that.endDateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, startDate, endDate);
+        return Objects.hash(name, startDateTime, endDateTime);
     }
 
     private class Responder implements Comparable<Responder> {
-        private String username;
+        private final String username;
         private double totalScore;
+        //TODO: think about this field, really long? It can be DateTime!
         private long averageSentTime;
 
         public Responder(String username) {
@@ -206,13 +232,7 @@ public class Assignment {
             if (this.totalScore < o.totalScore) {
                 return -1;
             }
-            if (this.averageSentTime < o.averageSentTime) {
-                return 1;
-            }
-            if (this.averageSentTime > o.averageSentTime) {
-                return -1;
-            }
-            return 0;
+            return Long.compare(o.averageSentTime, this.averageSentTime);
         }
 
         @Override

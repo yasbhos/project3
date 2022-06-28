@@ -47,7 +47,7 @@ public class TACourseMenu implements Menu {
     }
 
     private void addQuestionToAssignment() {
-        Assignment assignment = course.searchAssignmentByName();
+        Assignment assignment = course.searchAssignment();
         if (assignment == null) {
             return;
         }

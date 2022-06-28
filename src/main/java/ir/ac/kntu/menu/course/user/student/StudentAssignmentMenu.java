@@ -38,7 +38,7 @@ public class StudentAssignmentMenu implements Menu {
     }
 
     private void listOfQuestions() {
-        Question question = assignment.searchQuestionByName();
+        Question question = assignment.searchQuestion();
         if (question == null) {
             return;
         }

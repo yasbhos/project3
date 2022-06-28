@@ -15,14 +15,9 @@ public class ShortAnswerQuestion extends Question {
         return correctAnswer;
     }
 
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-
     @Override
     public Answer readAnswer(User user, String message) {
         String answer = ScannerWrapper.getInstance().readString(message);
-
         return new Answer(user.getUsername(), this, answer);
     }
 }

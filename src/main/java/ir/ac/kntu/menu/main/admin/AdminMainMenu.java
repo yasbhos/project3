@@ -66,6 +66,7 @@ public class AdminMainMenu implements Menu {
     private void handleUsersSubMenuOption(UsersSubMenu option) {
         switch (option) {
             case LIST_OF_USERS -> listOfUsers();
+            case ADD_NEW_ADMIN -> addNewAdmin();
             default -> {
             }
         }
@@ -80,6 +81,16 @@ public class AdminMainMenu implements Menu {
         System.out.println(user);
         AccountMenu accountMenu = new AccountMenu(user, adminDB, userDB);
         accountMenu.menu();
+    }
+
+    private void addNewAdmin() {
+        User user = userDB.getUser();
+        if (user == null) {
+            return;
+        }
+
+        user.setAdmin(true);
+        System.out.println("Successfully added");
     }
 
     private void coursesSubMenu() {

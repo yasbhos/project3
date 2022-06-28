@@ -52,7 +52,7 @@ public class LecturerAssignmentMenu implements Menu {
     }
 
     private void removeQuestion() {
-        Question question = assignment.searchQuestionByName();
+        Question question = assignment.searchQuestion();
         if (question == null) {
             return;
         }
@@ -62,7 +62,7 @@ public class LecturerAssignmentMenu implements Menu {
     }
 
     private void listOfQuestions() {
-        Question question = assignment.searchQuestionByName();
+        Question question = assignment.searchQuestion();
         if (question == null) {
             return;
         }
