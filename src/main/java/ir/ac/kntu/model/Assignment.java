@@ -13,15 +13,25 @@ public class Assignment {
     }
 
     private String name;
+
     private String description;
+
     private DateTime startDateTime;
+
     private DateTime endDateTime;
+
     private int delayCoefficient;
+
     private DateTime delayDateTime;
+
     private Status assignmentStatus;
+
     private Status scoreBoardStatus;
+
     private final ArrayList<Question> questions;
+
     private final ArrayList<Responder> responders;
+
     private boolean automaticScoring;
 
     public Assignment(String name, String description, DateTime startDateTime, DateTime endDateTime,
@@ -200,7 +210,9 @@ public class Assignment {
 
     private class Responder implements Comparable<Responder> {
         private final String username;
+
         private double totalScore;
+
         //TODO: think about this field, really long? It can be DateTime!
         private long averageSentTime;
 

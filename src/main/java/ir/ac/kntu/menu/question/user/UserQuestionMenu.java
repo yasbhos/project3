@@ -8,6 +8,7 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class UserQuestionMenu implements Menu {
     private User currentUser;
+
     private Question question;
 
     public UserQuestionMenu(User currentUser, Question question) {

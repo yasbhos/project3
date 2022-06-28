@@ -14,8 +14,11 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class LecturerCourseMenu implements Menu {
     private User lecturer;
+
     private Course course;
+
     private UserDB userDB;
+
     private QuestionDB questionDB;
 
     public LecturerCourseMenu(User lecturer, Course course, UserDB userDB, QuestionDB questionDB) {

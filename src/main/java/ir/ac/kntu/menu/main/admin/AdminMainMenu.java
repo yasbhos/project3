@@ -18,10 +18,15 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class AdminMainMenu implements Menu {
     private User currentAdmin;
+
     private AdminDB adminDB;
+
     private UserDB userDB;
+
     private CourseDB courseDB;
+
     private ContestDB contestDB;
+
     private QuestionDB questionDB;
 
     public AdminMainMenu(User currentAdmin,AdminDB adminDB, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {

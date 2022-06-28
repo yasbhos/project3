@@ -10,7 +10,9 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class AdminContestMenu implements Menu {
     private User currentAdmin;
+
     private UserDB userDB;
+
     private ContestDB contestDB;
 
     public AdminContestMenu(User currentAdmin, UserDB userDB, ContestDB contestDB) {

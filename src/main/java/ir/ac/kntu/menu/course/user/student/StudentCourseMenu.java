@@ -8,6 +8,7 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class StudentCourseMenu implements Menu {
     private User student;
+
     private Course course;
 
     public StudentCourseMenu(User student, Course course) {

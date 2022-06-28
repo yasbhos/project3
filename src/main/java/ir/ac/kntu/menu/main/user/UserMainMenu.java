@@ -16,10 +16,15 @@ import java.util.ArrayList;
 
 public class UserMainMenu implements Menu {
     private User currentUser;
+
     private AdminDB adminDB;
+
     private UserDB userDB;
+
     private CourseDB courseDB;
+
     private ContestDB contestDB;
+
     private QuestionDB questionDB;
 
     public UserMainMenu(User currentUser, AdminDB adminDB, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {

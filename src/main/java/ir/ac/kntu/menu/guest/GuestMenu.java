@@ -9,6 +9,7 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class GuestMenu implements Menu {
     private ContestDB contestDB;
+
     private QuestionDB questionDB;
 
     public GuestMenu(ContestDB contestDB, QuestionDB questionDB) {

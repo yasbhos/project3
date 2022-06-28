@@ -5,8 +5,11 @@ import java.util.Collections;
 
 public class PrivateContest extends Contest {
     private static final int MAXIMUM_PARTICIPANTS = 20;
+
     private final ArrayList<User> participants;
+
     private final ArrayList<User> whosCanParticipant;
+
     private final ArrayList<Responder> responders;
 
     public PrivateContest(User ownerAdmin, String name, DateTime startDateTime, DateTime endDateTime, ArrayList<Question> questions) {
@@ -53,7 +56,9 @@ public class PrivateContest extends Contest {
 
     private class Responder implements Comparable<Responder> {
         private final String username;
+
         private double totalScore;
+
         //TODO: think about this field, really long? It can be DateTime!
         private long averageSentTime;
 

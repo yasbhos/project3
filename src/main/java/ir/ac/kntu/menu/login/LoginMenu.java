@@ -11,9 +11,13 @@ import ir.ac.kntu.util.UserUtility;
 
 public class LoginMenu implements Menu {
     private AdminDB adminDB;
+
     private UserDB userDB;
+
     private CourseDB courseDB;
+
     private ContestDB contestDB;
+
     private QuestionDB questionDB;
 
     public LoginMenu(AdminDB adminDB, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {

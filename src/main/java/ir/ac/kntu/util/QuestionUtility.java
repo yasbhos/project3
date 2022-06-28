@@ -17,27 +17,33 @@ public class QuestionUtility {
         QuestionLevel level = ScannerWrapper.getInstance().readEnum(QuestionLevel.values());
         return switch (type) {
             case CHOICE_ONE -> {
-                System.out.println("Enter Question options");
-                String a = ScannerWrapper.getInstance().readString("Enter the text of the option A: ");
-                String b = ScannerWrapper.getInstance().readString("Enter the text of the option B: ");
-                String c = ScannerWrapper.getInstance().readString("Enter the text of the option C: ");
-                String d = ScannerWrapper.getInstance().readString("Enter the text of the option D: ");
-                enum Option {
-                    A, B, C, D
-                }
-                Option option = ScannerWrapper.getInstance().readEnum(Option.values(), "", "Enter correct option");
-                yield switch (option) {
-                    case A -> new ChoiceOneQuestion(name, score, description, type, level, a, b, c, d, "A");
-                    case B -> new ChoiceOneQuestion(name, score, description, type, level, a, b, c, d, "B");
-                    case C -> new ChoiceOneQuestion(name, score, description, type, level, a, b, c, d, "C");
-                    case D -> new ChoiceOneQuestion(name, score, description, type, level, a, b, c, d, "D");
-                };
+                yield getQuestion(name, score, description, type, level);
             }
             case SHORT_ANSWER -> {
                 String correctAnswer = ScannerWrapper.getInstance().readString("Enter correct answer: ");
-                yield  new ShortAnswerQuestion(name, score, description, type, level, correctAnswer);
+                yield new ShortAnswerQuestion(name, score, description, type, level, correctAnswer);
             }
             case LONG_ANSWER, FILL_IN_THE_BLANK -> new Question(name, score, description, type, level);
+        };
+    }
+
+    private static Question getQuestion(String name, double score, String description, QuestionType type, QuestionLevel level) {
+        System.out.println("Enter Question options");
+        String a = ScannerWrapper.getInstance().readString("Enter the text of the option A: ");
+        String b = ScannerWrapper.getInstance().readString("Enter the text of the option B: ");
+        String c = ScannerWrapper.getInstance().readString("Enter the text of the option C: ");
+        String d = ScannerWrapper.getInstance().readString("Enter the text of the option D: ");
+        enum Option {
+            A, B, C, D
+        }
+
+        Option option = ScannerWrapper.getInstance().readEnum(Option.values(), "", "Enter correct option");
+
+        return switch (option) {
+            case A -> new ChoiceOneQuestion(name, score, description, type, level, a, b, c, d, "A");
+            case B -> new ChoiceOneQuestion(name, score, description, type, level, a, b, c, d, "B");
+            case C -> new ChoiceOneQuestion(name, score, description, type, level, a, b, c, d, "C");
+            case D -> new ChoiceOneQuestion(name, score, description, type, level, a, b, c, d, "D");
         };
     }
 }

@@ -9,6 +9,7 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class LecturerAssignmentMenu implements Menu {
     private Assignment assignment;
+
     private QuestionDB questionDB;
 
     public LecturerAssignmentMenu(Assignment assignment, QuestionDB questionDB) {

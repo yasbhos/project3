@@ -9,7 +9,9 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class AccountMenu implements Menu {
     private User user;
+
     private AdminDB adminDB;
+
     private UserDB userDB;
 
     public AccountMenu(User user,AdminDB adminDB, UserDB userDB) {

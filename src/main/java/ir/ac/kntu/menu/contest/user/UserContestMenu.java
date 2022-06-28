@@ -9,6 +9,7 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class UserContestMenu implements Menu {
     private User currentUser;
+
     private Contest contest;
 
     public UserContestMenu(User currentUser, Contest contest) {

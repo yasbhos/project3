@@ -4,11 +4,17 @@ import ir.ac.kntu.util.DateTimeUtility;
 
 public class Answer {
     private String answer;
+
     private Question question;
+
     private DateTime sentDateTime;
+
     private String senderUsername;
+
     private double delayCoefficient;
+
     private double score;
+
     private double scoreWithDelay;
 
     public Answer(String answer, Question question, String senderUsername) {

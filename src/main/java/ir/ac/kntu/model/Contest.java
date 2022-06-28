@@ -8,11 +8,17 @@ import java.util.Objects;
 
 public class Contest {
     private final User ownerAdmin;
+
     private final String id;
+
     private String name;
+
     private DateTime startDateTime;
+
     private DateTime endDateTime;
+
     private final ArrayList<Question> questions;
+
     private boolean automaticScoring;
 
     public Contest(User ownerAdmin, String name, DateTime startDateTime, DateTime endDateTime,

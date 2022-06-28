@@ -9,6 +9,7 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class StudentAssignmentMenu implements Menu {
     private User currentUser;
+
     private Assignment assignment;
 
     public StudentAssignmentMenu(User currentUser, Assignment assignment) {

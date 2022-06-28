@@ -14,8 +14,11 @@ import ir.ac.kntu.util.ScannerWrapper;
  */
 public class TACourseMenu implements Menu {
     private User ta;
+
     private Course course;
+
     private UserDB userDB;
+
     private QuestionDB questionDB;
 
 

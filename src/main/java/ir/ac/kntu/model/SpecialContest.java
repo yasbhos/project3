@@ -7,7 +7,9 @@ import java.util.Collections;
 
 public class SpecialContest extends Contest {
     private static final int MAXIMUM_PARTICIPANTS = 100;
+
     private int maximumGroupsCapacity;
+
     private final ArrayList<Group> groups;
 
     public SpecialContest(User ownerAdmin, String name, DateTime startDateTime, DateTime endDateTime, ArrayList<Question> questions,
@@ -66,9 +68,13 @@ public class SpecialContest extends Contest {
 
     private class Group implements Comparable<Group> {
         private String name;
+
         private final ArrayList<User> members;
+
         private int totalScore;
+
         private int ranking;
+
         //TODO: think about this field, really long? It can be DateTime!
         private long averageSentTime;
 

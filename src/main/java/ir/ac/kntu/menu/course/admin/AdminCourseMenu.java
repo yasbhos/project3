@@ -11,7 +11,9 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class AdminCourseMenu implements Menu {
     private User currentAdmin;
+
     private Course course;
+
     private CourseDB courseDB;
 
     public AdminCourseMenu(User currentAdmin, Course course, CourseDB courseDB) {

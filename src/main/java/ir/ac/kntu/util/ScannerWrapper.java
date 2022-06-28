@@ -5,7 +5,9 @@ import java.util.Scanner;
 
 public class ScannerWrapper {
     private static ScannerWrapper instance = new ScannerWrapper();
+
     private Console console;
+
     private Scanner scanner;
 
     private ScannerWrapper() {

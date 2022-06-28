@@ -15,15 +15,25 @@ public class Course {
     }
 
     private final String id;
+
     private String name;
+
     private String institute;
+
     private User lecturer;
+
     private DateTime startDate;
+
     private CourseStatus status;
+
     private String hashedPassword;
+
     private String description;
+
     private final ArrayList<User> register;
+
     private final ArrayList<Assignment> assignments;
+
     private final ArrayList<User> teacherAssistants;
 
     public Course(User owner, String name, String institute, DateTime startDate, CourseStatus status,

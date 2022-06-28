@@ -4,7 +4,13 @@ import ir.ac.kntu.util.ScannerWrapper;
 
 public class ChoiceOneQuestion extends Question {
     private class Choices {
-        private String a, b, c, d;
+        private String a;
+
+        private String b;
+
+        private String c;
+
+        private String d;
 
         public Choices(String a, String b, String c, String d) {
             this.a = a;
@@ -31,6 +37,7 @@ public class ChoiceOneQuestion extends Question {
     }
 
     private Choices choices;
+
     private String correctAnswer;
 
     public ChoiceOneQuestion(String name, double score, String description, QuestionType type, QuestionLevel level,

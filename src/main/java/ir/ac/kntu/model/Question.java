@@ -23,12 +23,19 @@ public class Question {
     }
 
     private final String id;
+
     private String name;
+
     private double score;
+
     private String description;
+
     private QuestionType type;
+
     private QuestionLevel level;
+
     private DateTime uploadDateTime;
+
     private final ArrayList<Responder> responders;
 
     public Question(String name, double score, String description, QuestionType type, QuestionLevel level) {
@@ -153,6 +160,7 @@ public class Question {
 
     private class Responder {
         private final String username;
+
         private final ArrayList<Answer> sentAnswers;
 
         public Responder(String username) {

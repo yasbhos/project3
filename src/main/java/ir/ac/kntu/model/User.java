@@ -6,13 +6,21 @@ import java.util.Objects;
 
 public class User {
     private boolean admin;
+
     private String firstName;
+
     private String username;
+
     private String hashedPassword;
+
     private String email;
+
     private String phoneNumber;
+
     private String nationalCode;
+
     private int rating;
+
     private int ranking;
 
     public User(String firstName, String username, String password, String email, String phoneNumber, String nationalCode) {
