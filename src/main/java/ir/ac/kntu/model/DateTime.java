@@ -155,10 +155,6 @@ public class DateTime implements Comparable<DateTime> {
         return 0;
     }
 
-    public DateTime deepCopy() {
-        return new DateTime(year, month, day, hour, minute, second);
-    }
-
     @Override
     public String toString() {
         return String.format("%04d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, second);

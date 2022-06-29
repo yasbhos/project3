@@ -1,12 +1,16 @@
-package ir.ac.kntu.model;
+package ir.ac.kntu.model.contest;
 
+import ir.ac.kntu.model.DateTime;
+import ir.ac.kntu.model.Observer;
+import ir.ac.kntu.model.User;
+import ir.ac.kntu.model.question.Question;
 import ir.ac.kntu.util.IdGenerator;
 import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Contest {
+public class Contest implements Observer {
     private final User ownerAdmin;
 
     private final String id;
@@ -21,8 +25,8 @@ public class Contest {
 
     private boolean automaticScoring;
 
-    public Contest(User ownerAdmin, String name, DateTime startDateTime, DateTime endDateTime,
-                   ArrayList<Question> questions) {
+    public Contest(User ownerAdmin, String name, DateTime startDateTime,
+                   DateTime endDateTime, ArrayList<Question> questions) {
         this.ownerAdmin = ownerAdmin;
         this.id = IdGenerator.createID();
         this.name = name;
@@ -80,6 +84,10 @@ public class Contest {
         this.automaticScoring = automaticScoring;
     }
 
+    public ArrayList<Question> getQuestions() {
+        return new ArrayList<>(questions);
+    }
+
     public Question searchQuestion() {
         for (Question question : questions) {
             System.out.println("ID: " + question.getId() +
@@ -100,7 +108,10 @@ public class Contest {
     }
 
     public void scoreBoard() {
-        //TODO: check here
+    }
+
+    @Override
+    public void updateResponder(String username) {
     }
 
     @Override

@@ -21,7 +21,7 @@ public class User {
 
     private int rating;
 
-    private int ranking;
+    private int rank;
 
     public User(String firstName, String username, String password, String email, String phoneNumber, String nationalCode) {
         this.admin = false;
@@ -32,7 +32,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.nationalCode = nationalCode;
         this.rating = 0;
-        this.ranking = 0;
+        this.rank = 0;
     }
 
     public boolean isAdmin() {
@@ -99,12 +99,8 @@ public class User {
         this.rating = rating;
     }
 
-    public int getRanking() {
-        return ranking;
-    }
-
-    public void setRanking(int ranking) {
-        this.ranking = ranking;
+    public int getRank() {
+        return rating / 50;
     }
 
     @Override
@@ -117,7 +113,7 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", nationalCode='" + nationalCode + '\'' +
                 ", rating=" + rating +
-                ", ranking=" + ranking +
+                ", ranking=" + getRank() +
                 '}';
     }
 
@@ -129,6 +125,7 @@ public class User {
         if (!(o instanceof User user)) {
             return false;
         }
+
         return Objects.equals(username, user.username);
     }
 

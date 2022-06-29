@@ -1,9 +1,10 @@
-package ir.ac.kntu.model;
+package ir.ac.kntu.model.question;
 
+import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class ChoiceOneQuestion extends Question {
-    private class Choices {
+    public class Options {
         private String a;
 
         private String b;
@@ -12,7 +13,7 @@ public class ChoiceOneQuestion extends Question {
 
         private String d;
 
-        public Choices(String a, String b, String c, String d) {
+        public Options(String a, String b, String c, String d) {
             this.a = a;
             this.b = b;
             this.c = c;
@@ -36,24 +37,38 @@ public class ChoiceOneQuestion extends Question {
         }
     }
 
-    private Choices choices;
+    private Options options;
 
     private String correctAnswer;
 
-    public ChoiceOneQuestion(String name, double score, String description, QuestionType type, QuestionLevel level,
+    public ChoiceOneQuestion(String name, double score, String description, Type type, Level level,
                              String a, String b, String c, String d, String correctAnswer) {
         super(name, score, description, type, level);
-        this.choices = new Choices(a, b, c, d);
+        this.options = new Options(a, b, c, d);
         this.correctAnswer = correctAnswer;
+    }
+
+    public Options getOptions() {
+        return options;
+    }
+
+    public void setOptions(String a, String b, String c, String d) {
+        options.a = a;
+        options.b = b;
+        options.c = c;
+        options.d = d;
     }
 
     public String getCorrectAnswer() {
         return correctAnswer;
     }
 
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
     @Override
     public Answer readAnswer(User user, String message) {
-        //TODO: make this function clear and more readable
         System.out.println(message);
         enum Option {
             A, B, C, D
@@ -61,26 +76,25 @@ public class ChoiceOneQuestion extends Question {
 
         Option option = ScannerWrapper.getInstance().readEnum(Option.values(), "", "Enter correct option");
         return switch (option) {
-            case A ->  new Answer("A", this, user.getUsername());
-            case B ->  new Answer("B", this, user.getUsername());
-            case C ->  new Answer("C", this, user.getUsername());
-            case D ->  new Answer("D", this, user.getUsername());
+            case A -> new Answer(user.getUsername(), this, "a");
+            case B -> new Answer(user.getUsername(), this, "b");
+            case C -> new Answer(user.getUsername(), this, "c");
+            case D -> new Answer(user.getUsername(), this, "d");
         };
     }
 
     @Override
     public String toString() {
-        //TODO: make this function clear and more readable
         String questionToString = "Question{" +
                 "name='" + super.getName() + '\'' +
                 ", score=" + super.getScore() +
                 "\ndescription='" + super.getDescription() + "'\n";
 
-        questionToString += "Options:\n";
-        questionToString += choices.getA() + "\n";
-        questionToString += choices.getB() + "\n";
-        questionToString += choices.getC() + "\n";
-        questionToString += choices.getD() + "\n";
+        questionToString += "Options:\n" +
+                options.getA() + "\n" +
+                options.getB() + "\n" +
+                options.getC() + "\n" +
+                options.getD() + "\n";
 
         questionToString += "type=" + super.getType() +
                 ", level=" + super.getLevel() +

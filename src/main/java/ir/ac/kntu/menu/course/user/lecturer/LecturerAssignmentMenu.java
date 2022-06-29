@@ -3,14 +3,15 @@ package ir.ac.kntu.menu.course.user.lecturer;
 import ir.ac.kntu.db.QuestionDB;
 import ir.ac.kntu.menu.Menu;
 import ir.ac.kntu.menu.question.admin.AdminQuestionMenu;
-import ir.ac.kntu.model.Assignment;
-import ir.ac.kntu.model.Question;
+import ir.ac.kntu.model.course.Assignment;
+import ir.ac.kntu.model.question.Question;
+import ir.ac.kntu.util.QuestionUtility;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class LecturerAssignmentMenu implements Menu {
-    private Assignment assignment;
+    private final Assignment assignment;
 
-    private QuestionDB questionDB;
+    private final QuestionDB questionDB;
 
     public LecturerAssignmentMenu(Assignment assignment, QuestionDB questionDB) {
         this.assignment = assignment;
@@ -42,14 +43,34 @@ public class LecturerAssignmentMenu implements Menu {
     }
 
     private void addQuestion() {
-        //TODO: add new question or existing question
-        Question question = questionDB.getQuestion();
-        if (question == null) {
-            return;
+        enum Option {
+            ADD_NEW_QUESTION,
+            ADD_EXISTING_QUESTION
         }
 
-        assignment.addQuestion(question);
-        System.out.println("Successfully added");
+        Option option = ScannerWrapper.getInstance().readEnum(Option.values());
+        switch (option) {
+            case ADD_NEW_QUESTION -> {
+                Question question = QuestionUtility.readQuestion("Enter question attributes: ");
+                if (question == null) {
+                    return;
+                }
+
+                assignment.addQuestion(question);
+                System.out.println("Successfully added");
+            }
+            case ADD_EXISTING_QUESTION -> {
+                Question question = questionDB.getQuestion();
+                if (question == null) {
+                    return;
+                }
+
+                assignment.addQuestion(question);
+                System.out.println("Successfully added");
+            }
+            default -> {
+            }
+        }
     }
 
     private void removeQuestion() {
@@ -68,6 +89,8 @@ public class LecturerAssignmentMenu implements Menu {
             return;
         }
 
+        System.out.println(question);
+        System.out.println();
         AdminQuestionMenu adminQuestionMenu = new AdminQuestionMenu(question);
         adminQuestionMenu.menu();
     }

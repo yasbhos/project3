@@ -1,8 +1,8 @@
 package ir.ac.kntu.menu.course.user.student;
 
 import ir.ac.kntu.menu.Menu;
-import ir.ac.kntu.model.Assignment;
-import ir.ac.kntu.model.Course;
+import ir.ac.kntu.model.course.Assignment;
+import ir.ac.kntu.model.course.Course;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.ScannerWrapper;
 

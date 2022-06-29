@@ -20,23 +20,19 @@ public class ScannerWrapper {
     }
 
     public int nextInt() {
-        int nextInt = scanner.nextInt();
-        scanner.nextLine();
-        return nextInt;
+        String nextInt = scanner.next();
+        return Integer.parseInt(nextInt);
     }
 
     public int readInt(String message) {
         System.out.print(message);
-        int nextInt = scanner.nextInt();
-        scanner.nextLine();
-        return nextInt;
+        return nextInt();
     }
 
     public double readDouble(String message) {
         System.out.print(message);
-        double nextDouble = scanner.nextDouble();
-        scanner.nextLine();
-        return nextDouble;
+        String nextDouble = scanner.next();
+        return Double.parseDouble(nextDouble);
     }
 
     public String readString(String message) {
@@ -77,9 +73,10 @@ public class ScannerWrapper {
         int userInput = nextInt();
         userInput--;
         if (userInput >= 0 && userInput < options.length) {
+            System.out.println();
             return options[userInput];
         }
-        System.out.println("Invalid option!");
+        System.out.print("Please enter a valid number: ");
         return scanOption(options);
     }
 
@@ -89,7 +86,7 @@ public class ScannerWrapper {
             System.out.printf("%2d. %s\n", i + 1, options[i].name());
         }
         System.out.println("******************************");
-        System.out.println("Please enter your choice: ");
+        System.out.print("Please enter your choice: ");
     }
 
     private <T extends Enum<T>> void showMenu(T[] options, String menuName) {
@@ -98,6 +95,6 @@ public class ScannerWrapper {
             System.out.printf("%2d. %s\n", i + 1, options[i].name());
         }
         System.out.println("*************** " + menuName + " ***************");
-        System.out.println("Please enter your choice: ");
+        System.out.print("Please enter your choice: ");
     }
 }

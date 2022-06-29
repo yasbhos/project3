@@ -10,22 +10,28 @@ import ir.ac.kntu.menu.course.user.ta.TACourseMenu;
 import ir.ac.kntu.menu.main.user.UserMainMenuOption.*;
 import ir.ac.kntu.menu.question.user.UserQuestionMenu;
 import ir.ac.kntu.model.*;
+import ir.ac.kntu.model.contest.Contest;
+import ir.ac.kntu.model.contest.NormalContest;
+import ir.ac.kntu.model.contest.PrivateContest;
+import ir.ac.kntu.model.contest.SpecialContest;
+import ir.ac.kntu.model.course.Course;
+import ir.ac.kntu.model.question.Question;
 import ir.ac.kntu.util.*;
 
 import java.util.ArrayList;
 
 public class UserMainMenu implements Menu {
-    private User currentUser;
+    private final User currentUser;
 
-    private AdminDB adminDB;
+    private final AdminDB adminDB;
 
-    private UserDB userDB;
+    private final UserDB userDB;
 
-    private CourseDB courseDB;
+    private final CourseDB courseDB;
 
-    private ContestDB contestDB;
+    private final ContestDB contestDB;
 
-    private QuestionDB questionDB;
+    private final QuestionDB questionDB;
 
     public UserMainMenu(User currentUser, AdminDB adminDB, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {
         this.currentUser = currentUser;
@@ -98,7 +104,7 @@ public class UserMainMenu implements Menu {
             return;
         }
 
-        if (course.isfTA(currentUser)) {
+        if (course.isTA(currentUser)) {
             TACourseMenu taCourseMenu = new TACourseMenu(currentUser, course, userDB, questionDB);
             taCourseMenu.menu();
             return;
@@ -128,12 +134,12 @@ public class UserMainMenu implements Menu {
             return false;
         }
 
-        if (course.getStatus() == Course.CourseStatus.CLOSE) {
+        if (course.getStatus() == Course.Status.CLOSE) {
             System.out.println("This course is close");
             return false;
         }
 
-        if (course.getStatus() == Course.CourseStatus.OPEN_PUBLIC) {
+        if (course.getStatus() == Course.Status.OPEN_PUBLIC) {
             return true;
         }
 

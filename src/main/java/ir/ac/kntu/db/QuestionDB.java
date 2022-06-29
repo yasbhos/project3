@@ -1,6 +1,6 @@
 package ir.ac.kntu.db;
 
-import ir.ac.kntu.model.Question;
+import ir.ac.kntu.model.question.Question;
 import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;

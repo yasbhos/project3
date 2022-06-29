@@ -21,10 +21,6 @@ public class UserDB {
         return users.remove(user);
     }
 
-    public boolean containsUser(User user) {
-        return users.contains(user);
-    }
-
     public User getUser() {
         for (User user : users) {
             System.out.println("Username: " + user.getUsername() + ", FirstName: " + user.getFirstName());

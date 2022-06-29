@@ -1,10 +1,10 @@
 package ir.ac.kntu.util;
 
-import ir.ac.kntu.model.ChoiceOneQuestion;
-import ir.ac.kntu.model.Question;
-import ir.ac.kntu.model.Question.QuestionType;
-import ir.ac.kntu.model.Question.QuestionLevel;
-import ir.ac.kntu.model.ShortAnswerQuestion;
+import ir.ac.kntu.model.question.ChoiceOneQuestion;
+import ir.ac.kntu.model.question.Question;
+import ir.ac.kntu.model.question.Question.Type;
+import ir.ac.kntu.model.question.Question.Level;
+import ir.ac.kntu.model.question.ShortAnswerQuestion;
 
 public class QuestionUtility {
     public static Question readQuestion(String message) {
@@ -13,12 +13,10 @@ public class QuestionUtility {
         String name = ScannerWrapper.getInstance().readString("Enter question name: ");
         double score = ScannerWrapper.getInstance().readDouble("Enter question score: ");
         String description = ScannerWrapper.getInstance().readString("Enter question description: ");
-        QuestionType type = ScannerWrapper.getInstance().readEnum(QuestionType.values());
-        QuestionLevel level = ScannerWrapper.getInstance().readEnum(QuestionLevel.values());
+        Type type = ScannerWrapper.getInstance().readEnum(Type.values());
+        Level level = ScannerWrapper.getInstance().readEnum(Level.values());
         return switch (type) {
-            case CHOICE_ONE -> {
-                yield getQuestion(name, score, description, type, level);
-            }
+            case CHOICE_ONE -> getQuestion(name, score, description, type, level);
             case SHORT_ANSWER -> {
                 String correctAnswer = ScannerWrapper.getInstance().readString("Enter correct answer: ");
                 yield new ShortAnswerQuestion(name, score, description, type, level, correctAnswer);
@@ -27,7 +25,7 @@ public class QuestionUtility {
         };
     }
 
-    private static Question getQuestion(String name, double score, String description, QuestionType type, QuestionLevel level) {
+    private static Question getQuestion(String name, double score, String description, Type type, Level level) {
         System.out.println("Enter Question options");
         String a = ScannerWrapper.getInstance().readString("Enter the text of the option A: ");
         String b = ScannerWrapper.getInstance().readString("Enter the text of the option B: ");

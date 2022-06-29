@@ -7,27 +7,27 @@ import ir.ac.kntu.menu.contest.admin.AdminContestMenu;
 import ir.ac.kntu.menu.course.admin.AdminCourseMenu;
 import ir.ac.kntu.menu.main.admin.AdminMainMenuOption.*;
 import ir.ac.kntu.menu.question.admin.AdminQuestionMenu;
-import ir.ac.kntu.model.Contest;
-import ir.ac.kntu.model.Course;
-import ir.ac.kntu.model.Question;
+import ir.ac.kntu.model.contest.Contest;
+import ir.ac.kntu.model.course.Course;
 import ir.ac.kntu.model.User;
+import ir.ac.kntu.model.question.Question;
 import ir.ac.kntu.util.ContestUtility;
 import ir.ac.kntu.util.CourseUtility;
 import ir.ac.kntu.util.QuestionUtility;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class AdminMainMenu implements Menu {
-    private User currentAdmin;
+    private final User currentAdmin;
 
-    private AdminDB adminDB;
+    private final AdminDB adminDB;
 
-    private UserDB userDB;
+    private final UserDB userDB;
 
-    private CourseDB courseDB;
+    private final CourseDB courseDB;
 
-    private ContestDB contestDB;
+    private final ContestDB contestDB;
 
-    private QuestionDB questionDB;
+    private final QuestionDB questionDB;
 
     public AdminMainMenu(User currentAdmin,AdminDB adminDB, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {
         this.currentAdmin = currentAdmin;
@@ -63,7 +63,7 @@ public class AdminMainMenu implements Menu {
     private void usersSubMenu() {
         UsersSubMenu usersSubMenu;
         do {
-            usersSubMenu = ScannerWrapper.getInstance().readEnum(UsersSubMenu.values());
+            usersSubMenu = ScannerWrapper.getInstance().readEnum(UsersSubMenu.values(), "USER SUB MENU");
             handleUsersSubMenuOption(usersSubMenu);
         } while (usersSubMenu != UsersSubMenu.BACK);
     }
@@ -84,6 +84,7 @@ public class AdminMainMenu implements Menu {
         }
 
         System.out.println(user);
+        System.out.println();
         AccountMenu accountMenu = new AccountMenu(user, adminDB, userDB);
         accountMenu.menu();
     }
@@ -94,14 +95,16 @@ public class AdminMainMenu implements Menu {
             return;
         }
 
+        userDB.removeUser(user);
         user.setAdmin(true);
+        adminDB.addAdmin(user);
         System.out.println("Successfully added");
     }
 
     private void coursesSubMenu() {
         CoursesSubMenu coursesSubMenu;
         do {
-            coursesSubMenu = ScannerWrapper.getInstance().readEnum(CoursesSubMenu.values());
+            coursesSubMenu = ScannerWrapper.getInstance().readEnum(CoursesSubMenu.values(), "COURSES SUB MENU");
             handleCoursesSubMenuOption(coursesSubMenu);
         } while (coursesSubMenu != CoursesSubMenu.BACK);
     }
@@ -148,14 +151,15 @@ public class AdminMainMenu implements Menu {
         }
 
         System.out.println(course);
-        AdminCourseMenu adminCourseMenu = new AdminCourseMenu(currentAdmin, course, courseDB);
+        System.out.println();
+        AdminCourseMenu adminCourseMenu = new AdminCourseMenu(currentAdmin, course, adminDB, userDB, questionDB);
         adminCourseMenu.menu();
     }
 
     private void contestsSubMenu() {
         ContestsSubMenu contestsSubMenu;
         do {
-            contestsSubMenu = ScannerWrapper.getInstance().readEnum(ContestsSubMenu.values());
+            contestsSubMenu = ScannerWrapper.getInstance().readEnum(ContestsSubMenu.values(), "CONTEST SUB MENU");
             handleContestsSubMenuOption(contestsSubMenu);
         } while (contestsSubMenu != ContestsSubMenu.BACK);
     }
@@ -173,6 +177,11 @@ public class AdminMainMenu implements Menu {
     private void addContest() {
         Contest contest = ContestUtility.readContest(currentAdmin, "Enter contest attributes");
         if (contest == null) {
+            return;
+        }
+
+        if (contestDB.containsContest(contest)) {
+            System.out.println("This contest has already been defined");
             return;
         }
 
@@ -197,14 +206,15 @@ public class AdminMainMenu implements Menu {
         }
 
         System.out.println(contest);
-        AdminContestMenu adminContestMenu = new AdminContestMenu(currentAdmin, userDB, contestDB);
+        System.out.println();
+        AdminContestMenu adminContestMenu = new AdminContestMenu(currentAdmin, contest, userDB, questionDB);
         adminContestMenu.menu();
     }
 
     private void questionsSubMenu() {
         QuestionsSubMenu questionsSubMenu;
         do {
-            questionsSubMenu = ScannerWrapper.getInstance().readEnum(QuestionsSubMenu.values());
+            questionsSubMenu = ScannerWrapper.getInstance().readEnum(QuestionsSubMenu.values(), "QUESTION SUB MENU");
             handleQuestionsSubMenuOption(questionsSubMenu);
         } while (questionsSubMenu != QuestionsSubMenu.BACK);
     }
@@ -222,6 +232,11 @@ public class AdminMainMenu implements Menu {
     private void addQuestion() {
         Question question = QuestionUtility.readQuestion("Enter question attributes");
         if (question == null) {
+            return;
+        }
+
+        if (questionDB.containsQuestion(question)) {
+            System.out.println("This question has already been defined");
             return;
         }
         
@@ -246,6 +261,7 @@ public class AdminMainMenu implements Menu {
         }
 
         System.out.println(question);
+        System.out.println();
         AdminQuestionMenu adminQuestionMenu = new AdminQuestionMenu(question);
         adminQuestionMenu.menu();
     }

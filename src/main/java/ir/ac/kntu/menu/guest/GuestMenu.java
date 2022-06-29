@@ -3,8 +3,8 @@ package ir.ac.kntu.menu.guest;
 import ir.ac.kntu.db.ContestDB;
 import ir.ac.kntu.db.QuestionDB;
 import ir.ac.kntu.menu.Menu;
-import ir.ac.kntu.model.Contest;
-import ir.ac.kntu.model.Question;
+import ir.ac.kntu.model.contest.Contest;
+import ir.ac.kntu.model.question.Question;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class GuestMenu implements Menu {

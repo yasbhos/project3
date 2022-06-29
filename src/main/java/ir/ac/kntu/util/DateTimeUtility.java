@@ -55,8 +55,10 @@ public class DateTimeUtility {
         return frac0 <= b && frac1 > b;
     }
 
-    public static long getAverageSentTime(DateTime baseCase, ArrayList<DateTime> sentDateTimes) {
-        //TODO
-        return 0;
+    //TODO: implement this method
+    public static DateTime getAverageSentDateTimes(ArrayList<DateTime> dateTimes) {
+        DateTime averageDT = new DateTime(0, 0, 0, 0, 0, 0);
+
+        return averageDT;
     }
 }

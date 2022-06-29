@@ -16,14 +16,6 @@ public class AdminDB {
         return admins.add(admin);
     }
 
-    public boolean removeAdmin(User admin) {
-        return admins.remove(admin);
-    }
-
-    public boolean containsAdmin(User admin) {
-        return admins.contains(admin);
-    }
-
     public User getAdminByUsername(String username) {
         return admins.stream().filter(admin -> admin.getUsername().equals(username)).findFirst().orElse(null);
     }

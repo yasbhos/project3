@@ -8,11 +8,11 @@ import ir.ac.kntu.util.Cipher;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class AccountMenu implements Menu {
-    private User user;
+    private final User user;
 
-    private AdminDB adminDB;
+    private final AdminDB adminDB;
 
-    private UserDB userDB;
+    private final UserDB userDB;
 
     public AccountMenu(User user,AdminDB adminDB, UserDB userDB) {
         this.user = user;

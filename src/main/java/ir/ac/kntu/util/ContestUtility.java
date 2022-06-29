@@ -1,6 +1,10 @@
 package ir.ac.kntu.util;
 
 import ir.ac.kntu.model.*;
+import ir.ac.kntu.model.contest.Contest;
+import ir.ac.kntu.model.contest.NormalContest;
+import ir.ac.kntu.model.contest.PrivateContest;
+import ir.ac.kntu.model.contest.SpecialContest;
 
 import java.util.ArrayList;
 

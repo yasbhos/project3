@@ -10,15 +10,15 @@ import ir.ac.kntu.util.ScannerWrapper;
 import ir.ac.kntu.util.UserUtility;
 
 public class LoginMenu implements Menu {
-    private AdminDB adminDB;
+    private final AdminDB adminDB;
 
-    private UserDB userDB;
+    private final UserDB userDB;
 
-    private CourseDB courseDB;
+    private final CourseDB courseDB;
 
-    private ContestDB contestDB;
+    private final ContestDB contestDB;
 
-    private QuestionDB questionDB;
+    private final QuestionDB questionDB;
 
     public LoginMenu(AdminDB adminDB, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {
         this.adminDB = adminDB;

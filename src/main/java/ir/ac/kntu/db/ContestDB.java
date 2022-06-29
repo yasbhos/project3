@@ -1,7 +1,7 @@
 package ir.ac.kntu.db;
 
-import ir.ac.kntu.model.Contest;
-import ir.ac.kntu.model.PrivateContest;
+import ir.ac.kntu.model.contest.Contest;
+import ir.ac.kntu.model.contest.PrivateContest;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.DateTimeUtility;
 import ir.ac.kntu.util.ScannerWrapper;

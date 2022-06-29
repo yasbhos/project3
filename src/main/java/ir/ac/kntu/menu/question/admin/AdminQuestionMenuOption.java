@@ -6,5 +6,7 @@ public enum AdminQuestionMenuOption {
     EDIT_DESCRIPTION,
     EDIT_TYPE,
     EDIT_LEVEL,
+    EDIT_CORRECT_ANSWER,
+    EDIT_QUESTION_OPTIONS,
     BACK
 }

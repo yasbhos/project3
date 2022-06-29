@@ -3,23 +3,24 @@ package ir.ac.kntu.menu.course.user.ta;
 import ir.ac.kntu.db.QuestionDB;
 import ir.ac.kntu.db.UserDB;
 import ir.ac.kntu.menu.Menu;
-import ir.ac.kntu.model.Assignment;
-import ir.ac.kntu.model.Course;
-import ir.ac.kntu.model.Question;
+import ir.ac.kntu.model.course.Assignment;
+import ir.ac.kntu.model.course.Course;
 import ir.ac.kntu.model.User;
+import ir.ac.kntu.model.question.Question;
+import ir.ac.kntu.util.QuestionUtility;
 import ir.ac.kntu.util.ScannerWrapper;
 
 /**
  * Represents Teacher Assistant class
  */
 public class TACourseMenu implements Menu {
-    private User ta;
+    private final User ta;
 
-    private Course course;
+    private final Course course;
 
-    private UserDB userDB;
+    private final UserDB userDB;
 
-    private QuestionDB questionDB;
+    private final QuestionDB questionDB;
 
 
     public TACourseMenu(User ta, Course course, UserDB userDB, QuestionDB questionDB) {
@@ -55,14 +56,34 @@ public class TACourseMenu implements Menu {
             return;
         }
 
-        //TODO: add new question or existing question
-        Question question = questionDB.getQuestion();
-        if (question == null) {
-            return;
+        enum Option {
+            ADD_NEW_QUESTION,
+            ADD_EXISTING_QUESTION
         }
 
-        assignment.addQuestion(question);
-        System.out.println("Successfully added");
+        Option option = ScannerWrapper.getInstance().readEnum(Option.values());
+        switch (option) {
+            case ADD_NEW_QUESTION -> {
+                Question question = QuestionUtility.readQuestion("Enter question attributes: ");
+                if (question == null) {
+                    return;
+                }
+
+                assignment.addQuestion(question);
+                System.out.println("Successfully added");
+            }
+            case ADD_EXISTING_QUESTION -> {
+                Question question = questionDB.getQuestion();
+                if (question == null) {
+                    return;
+                }
+
+                assignment.addQuestion(question);
+                System.out.println("Successfully added");
+            }
+            default -> {
+            }
+        }
     }
 
     private void setLecturer() {

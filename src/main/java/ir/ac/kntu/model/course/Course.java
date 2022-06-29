@@ -1,5 +1,7 @@
-package ir.ac.kntu.model;
+package ir.ac.kntu.model.course;
 
+import ir.ac.kntu.model.DateTime;
+import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.Cipher;
 import ir.ac.kntu.util.IdGenerator;
 import ir.ac.kntu.util.ScannerWrapper;
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Course {
-    public enum CourseStatus {
+    public enum Status {
         OPEN_PUBLIC,
         OPEN_PRIVATE,
         CLOSE
@@ -24,7 +26,7 @@ public class Course {
 
     private DateTime startDate;
 
-    private CourseStatus status;
+    private Status status;
 
     private String hashedPassword;
 
@@ -36,8 +38,8 @@ public class Course {
 
     private final ArrayList<User> teacherAssistants;
 
-    public Course(User owner, String name, String institute, DateTime startDate, CourseStatus status,
-                  String password, String description) {
+    public Course(User owner, String name, String institute, DateTime startDate,
+                  Status status, String password, String description) {
         this.id = IdGenerator.createID();
         this.name = name;
         this.institute = institute;
@@ -87,11 +89,11 @@ public class Course {
         this.startDate = startDate;
     }
 
-    public CourseStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(CourseStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -119,8 +121,22 @@ public class Course {
         return register.remove(student);
     }
 
-    public boolean containsStudent(User student) {
-        return register.contains(student);
+    public User searchStudent() {
+        for (User student : register) {
+            System.out.println("Username: " + student.getUsername() + ", FirstName: " + student.getFirstName());
+        }
+        String username = ScannerWrapper.getInstance().readString("Enter username: ");
+        User user = getStudentByUsername(username);
+        if (user == null) {
+            System.out.println("Invalid username");
+            return null;
+        }
+
+        return user;
+    }
+
+    private User getStudentByUsername(String username) {
+        return register.stream().filter(user -> user.getUsername().equals(username)).findFirst().orElse(null);
     }
 
     public boolean addAssignment(Assignment assignment) {
@@ -145,15 +161,41 @@ public class Course {
         return null;
     }
 
+    public boolean addTA(User ta) {
+        return teacherAssistants.add(ta);
+    }
+
+    public boolean removeTA(User ta) {
+        return teacherAssistants.remove(ta);
+    }
+
+    public User searchTA() {
+        for (User student : teacherAssistants) {
+            System.out.println("Username: " + student.getUsername() + ", FirstName: " + student.getFirstName());
+        }
+        String username = ScannerWrapper.getInstance().readString("Enter username: ");
+        User user = getTAByUsername(username);
+        if (user == null) {
+            System.out.println("Invalid username");
+            return null;
+        }
+
+        return user;
+    }
+
+    private User getTAByUsername(String username) {
+        return teacherAssistants.stream().filter(user -> user.getUsername().equals(username)).findFirst().orElse(null);
+    }
+
     public boolean isLecturer(User user) {
-        if (this.lecturer == null) {
+        if (lecturer == null) {
             return false;
         }
 
-        return this.lecturer.equals(user);
+        return lecturer.equals(user);
     }
 
-    public boolean isfTA(User user) {
+    public boolean isTA(User user) {
         return teacherAssistants.contains(user);
     }
 
@@ -181,6 +223,7 @@ public class Course {
         if (!(o instanceof Course course)) {
             return false;
         }
+
         return Objects.equals(id, course.id);
     }
 

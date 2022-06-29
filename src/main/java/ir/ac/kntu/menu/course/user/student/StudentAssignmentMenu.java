@@ -2,15 +2,15 @@ package ir.ac.kntu.menu.course.user.student;
 
 import ir.ac.kntu.menu.Menu;
 import ir.ac.kntu.menu.question.user.UserQuestionMenu;
-import ir.ac.kntu.model.Assignment;
-import ir.ac.kntu.model.Question;
+import ir.ac.kntu.model.course.Assignment;
 import ir.ac.kntu.model.User;
+import ir.ac.kntu.model.question.Question;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class StudentAssignmentMenu implements Menu {
-    private User currentUser;
+    private final User currentUser;
 
-    private Assignment assignment;
+    private final Assignment assignment;
 
     public StudentAssignmentMenu(User currentUser, Assignment assignment) {
         this.currentUser = currentUser;

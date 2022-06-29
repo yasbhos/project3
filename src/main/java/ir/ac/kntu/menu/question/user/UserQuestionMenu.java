@@ -1,15 +1,15 @@
 package ir.ac.kntu.menu.question.user;
 
 import ir.ac.kntu.menu.Menu;
-import ir.ac.kntu.model.Answer;
-import ir.ac.kntu.model.Question;
 import ir.ac.kntu.model.User;
+import ir.ac.kntu.model.question.Answer;
+import ir.ac.kntu.model.question.Question;
 import ir.ac.kntu.util.ScannerWrapper;
 
 public class UserQuestionMenu implements Menu {
-    private User currentUser;
+    private final User currentUser;
 
-    private Question question;
+    private final Question question;
 
     public UserQuestionMenu(User currentUser, Question question) {
         this.currentUser = currentUser;
@@ -37,7 +37,7 @@ public class UserQuestionMenu implements Menu {
     }
 
     private void listSentAnswers() {
-        question.listSentAnswers(currentUser);
+        //TODO: implement this method
     }
 
     private void sendAnswer() {
@@ -46,6 +46,6 @@ public class UserQuestionMenu implements Menu {
             return;
         }
 
-        question.addAnswer(currentUser, answer);
+        question.addAnswer(answer);
     }
 }

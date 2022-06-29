@@ -3,8 +3,8 @@ package ir.ac.kntu.menu.course.user.lecturer;
 import ir.ac.kntu.db.QuestionDB;
 import ir.ac.kntu.db.UserDB;
 import ir.ac.kntu.menu.Menu;
-import ir.ac.kntu.model.Assignment;
-import ir.ac.kntu.model.Course;
+import ir.ac.kntu.model.course.Assignment;
+import ir.ac.kntu.model.course.Course;
 import ir.ac.kntu.model.DateTime;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.util.AssignmentUtility;
@@ -106,7 +106,7 @@ public class LecturerCourseMenu implements Menu {
 
     private void editStatus() {
         System.out.println("Enter new status: ");
-        Course.CourseStatus status = ScannerWrapper.getInstance().readEnum(Course.CourseStatus.values());
+        Course.Status status = ScannerWrapper.getInstance().readEnum(Course.Status.values());
         course.setStatus(status);
         System.out.println("Successfully changed");
     }

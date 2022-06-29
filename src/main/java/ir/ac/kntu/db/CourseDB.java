@@ -1,6 +1,6 @@
 package ir.ac.kntu.db;
 
-import ir.ac.kntu.model.Course;
+import ir.ac.kntu.model.course.Course;
 import ir.ac.kntu.util.ScannerWrapper;
 
 import java.util.ArrayList;
@@ -37,7 +37,6 @@ public class CourseDB {
             case NAME -> searchCourseByName();
             case LECTURER -> searchCourseByLecturer();
             case INSTITUTE -> searchCourseByInstitute();
-            default -> null;
         };
     }
 
