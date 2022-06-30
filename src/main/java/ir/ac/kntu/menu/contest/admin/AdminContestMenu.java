@@ -2,15 +2,20 @@ package ir.ac.kntu.menu.contest.admin;
 
 import ir.ac.kntu.db.QuestionDB;
 import ir.ac.kntu.db.UserDB;
+import ir.ac.kntu.model.contest.NormalContest;
+import ir.ac.kntu.util.ExportAsHTML;
 import ir.ac.kntu.menu.Menu;
 import ir.ac.kntu.menu.question.admin.AdminQuestionMenu;
 import ir.ac.kntu.model.*;
 import ir.ac.kntu.model.contest.Contest;
 import ir.ac.kntu.model.contest.PrivateContest;
+import ir.ac.kntu.model.question.Answer;
 import ir.ac.kntu.model.question.Question;
 import ir.ac.kntu.util.DateTimeUtility;
 import ir.ac.kntu.util.QuestionUtility;
 import ir.ac.kntu.util.ScannerWrapper;
+
+import java.util.ArrayList;
 
 public class AdminContestMenu implements Menu {
     private final User currentAdmin;
@@ -43,8 +48,13 @@ public class AdminContestMenu implements Menu {
             case ADD_QUESTION -> addQuestion();
             case REMOVE_QUESTION -> removeQuestion();
             case LIST_OF_QUESTIONS -> listOfQuestions();
+            case ADD_USER_TO_CONTEST -> addUserToContest();
             case INVITE_USER_TO_CONTEST -> inviteUserToContest();
-            case SCOREBOARD -> scoreBoard();
+            case REGISTER_MARK_TO_FINAL_SENT -> contest.registerMarkToFinalSent();
+            case EXPORT_FINAL_ANSWERS_AS_HTML_DOC -> exportFinalAnswerAsHTML();
+            case EXPORT_SCOREBOARD_RESULT_AS_HTML_DOC -> contest.exportScoreBoard();
+            case SCOREBOARD -> contest.scoreBoard();
+            case FINAL_RESULTS -> contest.finalResult(userDB);
             case EDIT_NAME -> editName();
             case EDIT_START_DATETIME -> editStartDateTime();
             case EDIT_END_DATETIME -> editEndDateTime();
@@ -68,15 +78,17 @@ public class AdminContestMenu implements Menu {
                     return;
                 }
 
+                question.setObserver(contest);
                 contest.addQuestion(question);
                 System.out.println("Successfully added");
             }
             case ADD_EXISTING_QUESTION -> {
-                Question question = questionDB.getQuestion();
+                Question question = questionDB.getQuestion().deepCopy();
                 if (question == null) {
                     return;
                 }
 
+                question.setObserver(contest);
                 contest.addQuestion(question);
                 System.out.println("Successfully added");
             }
@@ -107,9 +119,22 @@ public class AdminContestMenu implements Menu {
         adminQuestionMenu.menu();
     }
 
+    private void addUserToContest() {
+        User target = userDB.getUser();
+        if (target == null) {
+            return;
+        }
+        if (contest.containsParticipant(target)) {
+            System.out.println("This user has been registered to contest before");
+            return;
+        }
+
+        contest.addParticipant(target);
+    }
+
     private void inviteUserToContest() {
         if (contest instanceof PrivateContest privateContest) {
-            User user = userDB.getUser();
+            User user = userDB.getUserByNationalCodeOrEmail();
             if (user == null) {
                 return;
             }
@@ -122,8 +147,16 @@ public class AdminContestMenu implements Menu {
         System.out.println("This contest is not private");
     }
 
-    private void scoreBoard() {
-        contest.scoreBoard();
+    private void exportFinalAnswerAsHTML() {
+        ArrayList<Answer> answers = new ArrayList<>();
+        for (Question question : contest.getQuestions()) {
+            for (Question.Responder responder : question.getResponders()) {
+                answers.add(responder.getFinalAnswer());
+            }
+        }
+
+        ExportAsHTML.exportAnswers(answers, "exported-answers.html");
+        System.out.println("Successfully exported");
     }
 
     private void editName() {

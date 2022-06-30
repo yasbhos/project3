@@ -11,14 +11,9 @@ import ir.ac.kntu.menu.main.user.UserMainMenuOption.*;
 import ir.ac.kntu.menu.question.user.UserQuestionMenu;
 import ir.ac.kntu.model.*;
 import ir.ac.kntu.model.contest.Contest;
-import ir.ac.kntu.model.contest.NormalContest;
-import ir.ac.kntu.model.contest.PrivateContest;
-import ir.ac.kntu.model.contest.SpecialContest;
 import ir.ac.kntu.model.course.Course;
 import ir.ac.kntu.model.question.Question;
 import ir.ac.kntu.util.*;
-
-import java.util.ArrayList;
 
 public class UserMainMenu implements Menu {
     private final User currentUser;
@@ -172,8 +167,11 @@ public class UserMainMenu implements Menu {
         }
 
         System.out.println(contest);
-        UserContestMenu userContestMenu = new UserContestMenu(currentUser, contest);
-        userContestMenu.menu();
+        System.out.println();
+        if (contest.containsParticipant(currentUser)) {
+            UserContestMenu userContestMenu = new UserContestMenu(currentUser, contest);
+            userContestMenu.menu();
+        }
     }
 
     private void registerToContest() {
@@ -181,40 +179,13 @@ public class UserMainMenu implements Menu {
         if (!checkContestGuards(contest)) {
             return;
         }
-
-        if (contest instanceof SpecialContest specialContest) {
-            enum Input {
-                EXISTING_GROUP,
-                NEW_GROUP
-            }
-
-            System.out.println("Add to Existing group or make New group?");
-            Input input = ScannerWrapper.getInstance().readEnum(Input.values());
-            switch (input) {
-                case EXISTING_GROUP -> specialContest.addParticipantToExistingGroup(currentUser);
-                case NEW_GROUP -> {
-                    String name = ScannerWrapper.getInstance().readString("Enter group name: ");
-                    ArrayList<User> members = new ArrayList<>();
-                    members.add(currentUser);
-                    specialContest.addGroup(name, members);
-                }
-                default -> {
-                }
-            }
+        if (contest.containsParticipant(currentUser)) {
+            System.out.println("You have been registered to contest before");
             return;
         }
 
-        if (contest instanceof PrivateContest privateContest) {
-            if (privateContest.addParticipant(currentUser)) {
-                System.out.println("Successfully registered");
-            }
-            return;
-        }
-
-        NormalContest normalContest = (NormalContest) contest;
-        if (normalContest.addParticipant(currentUser)) {
-            System.out.println("Successfully registered");
-        }
+        contest.addParticipant(currentUser);
+        System.out.println("Successfully registered");
     }
 
     private boolean checkContestGuards(Contest contest) {

@@ -6,7 +6,7 @@ import ir.ac.kntu.util.Cipher;
 import java.util.ArrayList;
 
 public class AdminDB {
-    private ArrayList<User> admins;
+    private final ArrayList<User> admins;
 
     public AdminDB(ArrayList<User> admins) {
         this.admins = admins;

@@ -31,13 +31,14 @@ public class UserContestMenu implements Menu {
     public <T extends Enum<T>> void handleTheOption(T option) {
         switch ((UserContestMenuOption) option) {
             case LIST_OF_QUESTIONS -> listOfQuestions();
+            case LIST_FINAL_SENT_ANSWERS -> listFinalSentAnswers();
             case SCOREBOARD -> contest.scoreBoard();
             default -> {
             }
         }
     }
 
-    public void listOfQuestions() {
+    private void listOfQuestions() {
         Question question = contest.searchQuestion();
         if (question == null) {
             return;
@@ -45,5 +46,19 @@ public class UserContestMenu implements Menu {
 
         UserQuestionMenu userQuestionMenu = new UserQuestionMenu(currentUser, question);
         userQuestionMenu.menu();
+    }
+
+    private void listFinalSentAnswers() {
+        System.out.println("List of final sent answers to contest " + contest.getName());
+        System.out.println("------------------------------------------------------------");
+        for (Question question : contest.getQuestions()) {
+            Question.Responder responder = question.getResponderByUsername(currentUser.getUsername());
+            if (responder == null) {
+                continue;
+            }
+            System.out.println(responder.getFinalAnswer());
+            System.out.println();
+        }
+        System.out.println("------------------------------------------------------------");
     }
 }

@@ -145,6 +145,10 @@ public class Question {
         return uploadDateTime;
     }
 
+    public void setUploadDateTime(DateTime uploadDateTime) {
+        this.uploadDateTime = uploadDateTime;
+    }
+
     public Responder getResponderByUsername(String username) {
         return responders.stream().filter(responder -> responder.getUsername().equals(username)).findFirst().orElse(null);
     }
@@ -160,6 +164,7 @@ public class Question {
         if (target == null) {
             Responder responder = new Responder(answer.getSenderUsername());
             responder.addAnswer(answer);
+            responders.add(responder);
             observer.updateResponder(responder.getUsername());
         } else {
             target.addAnswer(answer);
@@ -167,23 +172,42 @@ public class Question {
         }
     }
 
-    public Answer readAnswer(User user, String message) {
-        String answer = ScannerWrapper.getInstance().readString(message);
+    public Answer readAnswer(User user) {
+        System.out.println(description);
+        System.out.println();
+        String answer = ScannerWrapper.getInstance().readString("Enter correct answer:");
 
         return new Answer(user.getUsername(), this, answer);
     }
 
+    public void listSentAnswers(User user) {
+        Responder target = responders.stream().filter(responder -> responder.getUsername().equals(user.getUsername())
+        ).findFirst().orElse(null);
+        if (target == null) {
+            return;
+        }
+
+        for (Answer answer : target.sentAnswers) {
+            System.out.println(answer);
+            System.out.println();
+        }
+    }
+
     public void registerMarkToFinalSent(DateTime endDateTime, int delayCoefficient) {
-        System.out.println("Register mark to final sent answers of question: " + this.name + "\n" + this.description);
+        System.out.println("Register mark to final sent answers of question:");
+        System.out.println(this);
+        System.out.println();
         System.out.println("start-------------------------------------------------------");
         for (Responder responder : responders) {
             registerMarkToResponder(endDateTime, delayCoefficient, responder);
+            observer.updateResponder(responder.getUsername());
         }
         System.out.println("done--------------------------------------------------------");
     }
 
     private void registerMarkToResponder(DateTime endDateTime, int delayCoefficient, Responder responder) {
-        System.out.println(responder.username + "\n" + responder.getFinalAnswer().getAnswer() + "\n");
+        System.out.println("Sender username: " + responder.username);
+        System.out.println(responder.getFinalAnswer());
         double mark = ScannerWrapper.getInstance().readDouble("Enter mark: ");
         responder.getFinalAnswer().setScore(mark);
 
@@ -193,6 +217,13 @@ public class Question {
             double markWithDelay = mark * (delayCoefficient / 100.0);
             responder.getFinalAnswer().setScoreWithDelay(markWithDelay);
         }
+    }
+
+    public Question deepCopy() {
+        Question question = new Question(name, score, description, type, level);
+        question.setUploadDateTime(uploadDateTime);
+
+        return question;
     }
 
     @Override

@@ -29,23 +29,20 @@ public class UserQuestionMenu implements Menu {
     @Override
     public <T extends Enum<T>> void handleTheOption(T option) {
         switch ((UserQuestionMenuOption) option) {
-            case LIST_SENT_ANSWERS -> listSentAnswers();
+            case LIST_SENT_ANSWERS -> question.listSentAnswers(currentUser);
             case SEND_ANSWER -> sendAnswer();
             default -> {
             }
         }
     }
 
-    private void listSentAnswers() {
-        //TODO: implement this method
-    }
-
     private void sendAnswer() {
-        Answer answer = question.readAnswer(currentUser, "Enter answer: ");
+        Answer answer = question.readAnswer(currentUser);
         if (answer == null) {
             return;
         }
 
         question.addAnswer(answer);
+        System.out.println("Successfully sent");
     }
 }

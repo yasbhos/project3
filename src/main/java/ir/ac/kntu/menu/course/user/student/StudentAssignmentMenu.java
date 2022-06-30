@@ -32,7 +32,7 @@ public class StudentAssignmentMenu implements Menu {
         switch ((StudentAssignmentMenuOption) option) {
             case SCOREBOARD -> assignment.scoreBoard();
             case LIST_OF_QUESTIONS -> listOfQuestions();
-            case LIST_OF_FINAL_SENT_ANSWERS -> listOfFinalSentAnswers();
+            case LIST_OF_FINAL_SENT_ANSWERS -> assignment.listFinalSentAnswers(currentUser);
             default -> {
             }
         }
@@ -46,9 +46,5 @@ public class StudentAssignmentMenu implements Menu {
 
         UserQuestionMenu userQuestionMenu = new UserQuestionMenu(currentUser, question);
         userQuestionMenu.menu();
-    }
-
-    private void listOfFinalSentAnswers() {
-        //TODO: implement this method
     }
 }

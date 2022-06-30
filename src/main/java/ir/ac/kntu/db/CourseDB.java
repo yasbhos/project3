@@ -6,7 +6,7 @@ import ir.ac.kntu.util.ScannerWrapper;
 import java.util.ArrayList;
 
 public class CourseDB {
-    private ArrayList<Course> courses;
+    private final ArrayList<Course> courses;
 
     public CourseDB(ArrayList<Course> courses) {
         this.courses = courses;

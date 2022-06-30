@@ -2,8 +2,11 @@ package ir.ac.kntu.model.contest;
 
 import ir.ac.kntu.db.UserDB;
 import ir.ac.kntu.model.*;
+import ir.ac.kntu.model.question.ChoiceOneQuestion;
 import ir.ac.kntu.model.question.Question;
+import ir.ac.kntu.model.question.ShortAnswerQuestion;
 import ir.ac.kntu.util.DateTimeUtility;
+import ir.ac.kntu.util.ExportAsHTML;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,18 +14,26 @@ import java.util.Collections;
 public class PrivateContest extends Contest implements Observer {
     private static final int MAXIMUM_PARTICIPANTS = 20;
 
-    private final ArrayList<User> participants;
-
     private final ArrayList<User> whosCanParticipant;
+
+    private final ArrayList<User> participants;
 
     private final ArrayList<SingleResponder> responders;
 
     public PrivateContest(User ownerAdmin, String name, DateTime startDateTime,
                           DateTime endDateTime, ArrayList<Question> questions) {
         super(ownerAdmin, name, startDateTime, endDateTime, questions);
-        this.participants = new ArrayList<>();
         this.whosCanParticipant = new ArrayList<>();
+        this.participants = new ArrayList<>();
         this.responders = new ArrayList<>();
+    }
+
+    public boolean addWhosCanParticipant(User user) {
+        return whosCanParticipant.add(user);
+    }
+
+    public boolean canParticipant(User user) {
+        return whosCanParticipant.contains(user);
     }
 
     public boolean addParticipant(User participant) {
@@ -38,22 +49,33 @@ public class PrivateContest extends Contest implements Observer {
         return participants.size() >= MAXIMUM_PARTICIPANTS;
     }
 
-    public boolean addWhosCanParticipant(User user) {
-        return whosCanParticipant.add(user);
+    @Override
+    public boolean containsParticipant(User target) {
+        return participants.contains(target);
     }
 
-    public boolean canParticipant(User user) {
-        return whosCanParticipant.contains(user);
+    @Override
+    public void registerMarkToFinalSent() {
+        System.out.println("Register mark to final sent of contest " + super.getName());
+        for (Question question : super.getQuestions()) {
+            question.registerMarkToFinalSent(super.getEndDateTime(), 100);
+        }
     }
 
     @Override
     public void scoreBoard() {
-        Collections.sort(responders);
+        responders.sort(Collections.reverseOrder());
         System.out.println("Scoreboard for contest " + super.getName());
         System.out.println("------------------------------------------------------------");
-        System.out.println("| Username | Total Score | Average sent DateTime");
+        System.out.println("| Username \tTotal Score\tAverage sent DateTime");
         responders.forEach(System.out::println);
         System.out.println("------------------------------------------------------------");
+    }
+
+    @Override
+    public void exportScoreBoard() {
+        responders.sort(Collections.reverseOrder());
+        ExportAsHTML.exportSingleResponders(responders, super.getName() + "-scoreboard.html");
     }
 
     @Override
@@ -65,6 +87,9 @@ public class PrivateContest extends Contest implements Observer {
             Question.Responder responder = question.getResponderByUsername(username);
             if (responder == null) {
                 continue;
+            }
+            if (isAutomaticScoring()) {
+                automaticScoring(question, responder);
             }
 
             totalScore += responder.getFinalAnswer().getScoreWithDelay();
@@ -78,20 +103,38 @@ public class PrivateContest extends Contest implements Observer {
         responders.add(responder);
     }
 
+    private void automaticScoring(Question question, Question.Responder responder) {
+        if (question instanceof ChoiceOneQuestion choiceOneQuestion) {
+            if (choiceOneQuestion.getCorrectAnswer().equals(responder.getFinalAnswer().getAnswer())) {
+                responder.getFinalAnswer().setScore(question.getScore());
+                responder.getFinalAnswer().setScoreWithDelay(question.getScore());
+            }
+        } else if (question instanceof ShortAnswerQuestion shortAnswerQuestion) {
+            if (shortAnswerQuestion.getCorrectAnswer().equals(responder.getFinalAnswer().getAnswer())) {
+                responder.getFinalAnswer().setScore(question.getScore());
+                responder.getFinalAnswer().setScoreWithDelay(question.getScore());
+            }
+        }
+    }
+
+    @Override
     public void finalResult(UserDB userDB) {
         if (DateTimeUtility.now().compareTo(super.getEndDateTime()) <= 0) {
             System.out.println("The contest is not over yet");
             return;
         }
+        if (responders.isEmpty()) {
+            return;
+        }
 
-        Collections.sort(responders);
+        responders.sort(Collections.reverseOrder());
         for (int i = 0; i < 3; i++) {
             responders.get(i).setTotalScore(responders.get(i).getTotalScore() + 10);
         }
 
         System.out.println("Final Result of contest " + super.getName());
         System.out.println("------------------------------------------------------------");
-        System.out.println("| Username | Total Score | Average sent DateTime");
+        System.out.println("| Username\tTotal Score\tAverage sent DateTime");
         responders.forEach(System.out::println);
         System.out.println("------------------------------------------------------------");
 

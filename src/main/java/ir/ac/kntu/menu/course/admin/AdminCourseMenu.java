@@ -253,15 +253,17 @@ public class AdminCourseMenu implements Menu {
                     return;
                 }
 
+                question.setObserver(assignment);
                 assignment.addQuestion(question);
                 System.out.println("Successfully added");
             }
             case ADD_EXISTING_QUESTION -> {
-                Question question = questionDB.getQuestion();
+                Question question = questionDB.getQuestion().deepCopy();
                 if (question == null) {
                     return;
                 }
 
+                question.setObserver(assignment);
                 assignment.addQuestion(question);
                 System.out.println("Successfully added");
             }

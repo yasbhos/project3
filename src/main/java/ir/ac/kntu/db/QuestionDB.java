@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class QuestionDB {
-    private ArrayList<Question> questions;
+    private final ArrayList<Question> questions;
 
     public QuestionDB(ArrayList<Question> questions) {
         this.questions = questions;

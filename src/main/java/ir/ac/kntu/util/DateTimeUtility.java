@@ -3,6 +3,7 @@ package ir.ac.kntu.util;
 import ir.ac.kntu.model.DateTime;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 
 public class DateTimeUtility {
@@ -55,10 +56,18 @@ public class DateTimeUtility {
         return frac0 <= b && frac1 > b;
     }
 
-    //TODO: implement this method
     public static DateTime getAverageSentDateTimes(ArrayList<DateTime> dateTimes) {
-        DateTime averageDT = new DateTime(0, 0, 0, 0, 0, 0);
+        long seconds = 0;
+        for (DateTime dateTime : dateTimes) {
+            LocalDateTime localDateTime = LocalDateTime.of(dateTime.getYear(), dateTime.getMonth(),
+                    dateTime.getDay(), dateTime.getHour(), dateTime.getMinute(), dateTime.getSecond());
+            seconds += localDateTime.toEpochSecond(ZoneOffset.UTC);
+        }
 
-        return averageDT;
+        seconds /= dateTimes.size();
+        LocalDateTime localDateTime = LocalDateTime.ofEpochSecond(seconds, 0, ZoneOffset.UTC);
+
+        return new DateTime(localDateTime.getYear(), localDateTime.getMonthValue(), localDateTime.getDayOfMonth(),
+                localDateTime.getHour(), localDateTime.getMinute(), localDateTime.getSecond());
     }
 }

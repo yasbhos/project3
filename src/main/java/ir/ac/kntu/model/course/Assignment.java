@@ -3,7 +3,10 @@ package ir.ac.kntu.model.course;
 import ir.ac.kntu.model.DateTime;
 import ir.ac.kntu.model.Observer;
 import ir.ac.kntu.model.SingleResponder;
+import ir.ac.kntu.model.User;
+import ir.ac.kntu.model.question.ChoiceOneQuestion;
 import ir.ac.kntu.model.question.Question;
+import ir.ac.kntu.model.question.ShortAnswerQuestion;
 import ir.ac.kntu.util.DateTimeUtility;
 import ir.ac.kntu.util.ScannerWrapper;
 
@@ -37,6 +40,8 @@ public class Assignment implements Observer {
 
     private final ArrayList<SingleResponder> responders;
 
+    private boolean automaticScoring;
+
     public Assignment(String name, String description, DateTime startDateTime, DateTime endDateTime,
                       DateTime delayDateTime, int delayCoefficient, Status assignmentStatus, Status scoreBoardStatus) {
         this.name = name;
@@ -49,6 +54,7 @@ public class Assignment implements Observer {
         this.scoreBoardStatus = scoreBoardStatus;
         this.questions = new ArrayList<>();
         this.responders = new ArrayList<>();
+        this.automaticScoring = true;
     }
 
     public String getName() {
@@ -115,6 +121,14 @@ public class Assignment implements Observer {
         this.scoreBoardStatus = scoreBoardStatus;
     }
 
+    public boolean isAutomaticScoring() {
+        return automaticScoring;
+    }
+
+    public void setAutomaticScoring(boolean automaticScoring) {
+        this.automaticScoring = automaticScoring;
+    }
+
     public boolean addQuestion(Question question) {
         return questions.add(question);
     }
@@ -142,11 +156,18 @@ public class Assignment implements Observer {
         return null;
     }
 
+    public void listFinalSentAnswers(User student) {
+        for (Question question : questions) {
+            System.out.println(question.getResponderByUsername(student.getUsername()).getFinalAnswer());
+            System.out.println();
+        }
+    }
+
     public void scoreBoard() {
-        Collections.sort(responders);
+        responders.sort(Collections.reverseOrder());
         System.out.println("Scoreboard for assignment " + this.name);
         System.out.println("------------------------------------------------------------");
-        System.out.println("| Student Username | Total Score | Average sent DateTime");
+        System.out.println("| Student Username\tTotal Score\tAverage sent DateTime");
         responders.forEach(System.out::println);
         System.out.println("------------------------------------------------------------");
     }
@@ -161,6 +182,9 @@ public class Assignment implements Observer {
             if (responder == null) {
                 continue;
             }
+            if (isAutomaticScoring()) {
+                automaticScoring(question, responder);
+            }
 
             totalScore += responder.getFinalAnswer().getScoreWithDelay();
             sentDTs.add(responder.getFinalAnswer().getSentDateTime());
@@ -171,6 +195,20 @@ public class Assignment implements Observer {
         responder.setAverageSentDT(DateTimeUtility.getAverageSentDateTimes(sentDTs));
         responders.remove(responder);
         responders.add(responder);
+    }
+
+    private void automaticScoring(Question question, Question.Responder responder) {
+        if (question instanceof ChoiceOneQuestion choiceOneQuestion) {
+            if (choiceOneQuestion.getCorrectAnswer().equals(responder.getFinalAnswer().getAnswer())) {
+                responder.getFinalAnswer().setScore(question.getScore());
+                responder.getFinalAnswer().setScoreWithDelay(question.getScore());
+            }
+        } else if (question instanceof ShortAnswerQuestion shortAnswerQuestion) {
+            if (shortAnswerQuestion.getCorrectAnswer().equals(responder.getFinalAnswer().getAnswer())) {
+                responder.getFinalAnswer().setScore(question.getScore());
+                responder.getFinalAnswer().setScoreWithDelay(question.getScore());
+            }
+        }
     }
 
     public void registerMarkToFinalSent() {

@@ -29,7 +29,7 @@ public class AdminMainMenu implements Menu {
 
     private final QuestionDB questionDB;
 
-    public AdminMainMenu(User currentAdmin,AdminDB adminDB, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {
+    public AdminMainMenu(User currentAdmin, AdminDB adminDB, UserDB userDB, CourseDB courseDB, ContestDB contestDB, QuestionDB questionDB) {
         this.currentAdmin = currentAdmin;
         this.adminDB = adminDB;
         this.userDB = userDB;
@@ -118,32 +118,32 @@ public class AdminMainMenu implements Menu {
             }
         }
     }
-    
+
     private void addCourse() {
         Course course = CourseUtility.readCourse(currentAdmin, "Enter course attributes");
         if (course == null) {
             return;
         }
-        
+
         if (courseDB.containsCourse(course)) {
             System.out.println("This course has already been defined");
             return;
         }
-        
+
         courseDB.addCourse(course);
         System.out.println("Successfully added");
     }
-    
+
     private void removeCourse() {
         Course course = courseDB.getCourse();
         if (course == null) {
             return;
         }
-        
+
         courseDB.removeCourse(course);
         System.out.println("Successfully removed");
     }
-    
+
     private void listOfCourses() {
         Course course = courseDB.getCourse();
         if (course == null) {
@@ -188,13 +188,18 @@ public class AdminMainMenu implements Menu {
         contestDB.addContest(contest);
         System.out.println("Successfully added");
     }
-    
+
     private void removeContest() {
         Contest contest = contestDB.getContestForAdmin();
         if (contest == null) {
             return;
         }
-        
+
+        if (!contest.getOwnerAdmin().equals(currentAdmin)) {
+            System.out.println("You are not owner of this contest");
+            return;
+        }
+
         contestDB.removeContest(contest);
         System.out.println("Successfully removed");
     }
@@ -207,6 +212,12 @@ public class AdminMainMenu implements Menu {
 
         System.out.println(contest);
         System.out.println();
+
+        if (!contest.getOwnerAdmin().equals(currentAdmin)) {
+            System.out.println("You cant access this contest because you are not owner of this contest");
+            return;
+        }
+
         AdminContestMenu adminContestMenu = new AdminContestMenu(currentAdmin, contest, userDB, questionDB);
         adminContestMenu.menu();
     }
@@ -228,7 +239,7 @@ public class AdminMainMenu implements Menu {
             }
         }
     }
-    
+
     private void addQuestion() {
         Question question = QuestionUtility.readQuestion("Enter question attributes");
         if (question == null) {
@@ -239,7 +250,7 @@ public class AdminMainMenu implements Menu {
             System.out.println("This question has already been defined");
             return;
         }
-        
+
         questionDB.addQuestion(question);
         System.out.println("Successfully added");
     }
@@ -249,11 +260,11 @@ public class AdminMainMenu implements Menu {
         if (question == null) {
             return;
         }
-        
+
         questionDB.removeQuestion(question);
         System.out.println("Successfully removed");
     }
-    
+
     private void listOfQuestions() {
         Question question = questionDB.getQuestion();
         if (question == null) {

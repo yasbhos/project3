@@ -68,13 +68,28 @@ public class ChoiceOneQuestion extends Question {
     }
 
     @Override
-    public Answer readAnswer(User user, String message) {
-        System.out.println(message);
+    public Question deepCopy() {
+        ChoiceOneQuestion question = new ChoiceOneQuestion(super.getName(), super.getScore(), super.getDescription(),
+                super.getType(), super.getLevel(), options.a, options.b, options.c, options.d, correctAnswer);
+        question.setUploadDateTime(super.getUploadDateTime());
+
+        return question;
+    }
+
+    @Override
+    public Answer readAnswer(User user) {
         enum Option {
             A, B, C, D
         }
 
-        Option option = ScannerWrapper.getInstance().readEnum(Option.values(), "", "Enter correct option");
+        System.out.println(super.getDescription());
+        System.out.println(this.getOptions().getA());
+        System.out.println(this.getOptions().getB());
+        System.out.println(this.getOptions().getC());
+        System.out.println(this.getOptions().getD());
+        System.out.println();
+        System.out.println("Enter correct option:");
+        Option option = ScannerWrapper.getInstance().readEnum(Option.values());
         return switch (option) {
             case A -> new Answer(user.getUsername(), this, "a");
             case B -> new Answer(user.getUsername(), this, "b");
@@ -91,10 +106,10 @@ public class ChoiceOneQuestion extends Question {
                 "\ndescription='" + super.getDescription() + "'\n";
 
         questionToString += "Options:\n" +
-                options.getA() + "\n" +
-                options.getB() + "\n" +
-                options.getC() + "\n" +
-                options.getD() + "\n";
+                "a. " + options.getA() + "\n" +
+                "b. " + options.getB() + "\n" +
+                "c. " + options.getC() + "\n" +
+                "d. " + options.getD() + "\n";
 
         questionToString += "type=" + super.getType() +
                 ", level=" + super.getLevel() +

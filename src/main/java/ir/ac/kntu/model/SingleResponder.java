@@ -25,6 +25,10 @@ public class SingleResponder implements Comparable<SingleResponder> {
         this.totalScore = totalScore;
     }
 
+    public DateTime getAverageSentDT() {
+        return averageSentDT;
+    }
+
     public void setAverageSentDT(DateTime averageSentDT) {
         this.averageSentDT = averageSentDT;
     }

@@ -34,25 +34,30 @@ public class Quera {
         User user = new User("Mahdi", "react", "1379",
                 "niati@gmail.com", "09334969659", "0710020650");
 
-        DateTime startDateTime = new DateTime(1400, 11, 18, 0, 0, 0);
+        DateTime startDateTime = new DateTime(2022, 6, 18, 0, 0, 0);
         Course course = new Course(user, "AP", "KNTU", startDateTime, Course.Status.OPEN_PRIVATE,
                 "2126", "Advanced Programming with Java language");
 
-        startDateTime = new DateTime(1401, 4, 15, 0, 0, 0);
-        DateTime endDateTime = new DateTime(1401, 4, 18, 0, 0, 0);
+        startDateTime = new DateTime(2022, 6, 30, 0, 0, 0);
+        DateTime endDateTime = new DateTime(2022, 7, 1, 0, 0, 0);
         Contest normalContest = new NormalContest(admin, "CodeCup4", startDateTime, endDateTime, new ArrayList<>());
 
-        Question question = new ChoiceOneQuestion("Test", 25,
+        Question question1 = new ChoiceOneQuestion("Test", 25,
                 "Select the word that is not one of the OOP pillars:",
                 Question.Type.CHOICE_ONE, Question.Level.EASY, "interface", "inheritance",
-                "encapsulation", "polymorphism", "A");
+                "encapsulation", "polymorphism", "a");
 
+        Question question2 = new ChoiceOneQuestion("Car", 100,
+                "How many wheels do the car have?",
+                Question.Type.CHOICE_ONE, Question.Level.VERY_HARD, "none", "1",
+                "2", "4", "d");
 
         adminDB.addAdmin(admin);
         userDB.addUser(user);
         courseDB.addCourse(course);
         contestDB.addContest(normalContest);
-        questionDB.addQuestion(question);
+        questionDB.addQuestion(question1);
+        questionDB.addQuestion(question2);
 
         loginMenu = new LoginMenu(adminDB, userDB, courseDB, contestDB, questionDB);
     }

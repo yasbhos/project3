@@ -1,5 +1,6 @@
 package ir.ac.kntu.model.contest;
 
+import ir.ac.kntu.db.UserDB;
 import ir.ac.kntu.model.DateTime;
 import ir.ac.kntu.model.Observer;
 import ir.ac.kntu.model.User;
@@ -107,7 +108,24 @@ public class Contest implements Observer {
         return null;
     }
 
+    public boolean addParticipant(User target) {
+        return true;
+    }
+
+    public boolean containsParticipant(User target) {
+        return true;
+    }
+
+    public void registerMarkToFinalSent() {
+    }
+
     public void scoreBoard() {
+    }
+
+    public void exportScoreBoard() {
+    }
+
+    public void finalResult(UserDB userDB) {
     }
 
     @Override

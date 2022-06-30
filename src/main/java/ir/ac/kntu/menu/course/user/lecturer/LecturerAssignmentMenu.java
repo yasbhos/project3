@@ -36,7 +36,7 @@ public class LecturerAssignmentMenu implements Menu {
             case REMOVE_QUESTION -> removeQuestion();
             case LIST_OF_QUESTIONS -> listOfQuestions();
             case LIST_OF_ANSWERS_BY_EMAIL -> listOfAnswersByEmail();
-            case REGISTER_MARK_TO_FINAL_SENT -> registerMarkToFinalSent();
+            case REGISTER_MARK_TO_FINAL_SENT -> assignment.registerMarkToFinalSent();
             default -> {
             }
         }
@@ -56,15 +56,17 @@ public class LecturerAssignmentMenu implements Menu {
                     return;
                 }
 
+                question.setObserver(assignment);
                 assignment.addQuestion(question);
                 System.out.println("Successfully added");
             }
             case ADD_EXISTING_QUESTION -> {
-                Question question = questionDB.getQuestion();
+                Question question = questionDB.getQuestion().deepCopy();
                 if (question == null) {
                     return;
                 }
 
+                question.setObserver(assignment);
                 assignment.addQuestion(question);
                 System.out.println("Successfully added");
             }
@@ -96,10 +98,6 @@ public class LecturerAssignmentMenu implements Menu {
     }
 
     private void listOfAnswersByEmail() {
-        //TODO: implement this method
-    }
-
-    private void registerMarkToFinalSent() {
         //TODO: implement this method
     }
 }

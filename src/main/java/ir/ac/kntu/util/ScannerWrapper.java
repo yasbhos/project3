@@ -21,22 +21,28 @@ public class ScannerWrapper {
 
     public int nextInt() {
         String nextInt = scanner.next();
+        scanner.nextLine();
+
         return Integer.parseInt(nextInt);
     }
 
     public int readInt(String message) {
         System.out.print(message);
+
         return nextInt();
     }
 
     public double readDouble(String message) {
         System.out.print(message);
         String nextDouble = scanner.next();
+        scanner.nextLine();
+
         return Double.parseDouble(nextDouble);
     }
 
     public String readString(String message) {
         System.out.print(message);
+
         return scanner.nextLine();
     }
 
@@ -50,22 +56,26 @@ public class ScannerWrapper {
             return null;
         }
         System.out.print(message);
+
         return String.valueOf(console.readPassword());
     }
 
     public <T extends Enum<T>> T readEnum(T[] options) {
         showMenu(options);
+
         return scanOption(options);
     }
 
     public <T extends Enum<T>> T readEnum(T[] options, String menuName) {
         showMenu(options, menuName);
+
         return scanOption(options);
     }
 
     public <T extends Enum<T>> T readEnum(T[] options, String menuName, String message) {
         System.out.println(message);
         showMenu(options, menuName);
+
         return scanOption(options);
     }
 
@@ -77,6 +87,7 @@ public class ScannerWrapper {
             return options[userInput];
         }
         System.out.print("Please enter a valid number: ");
+
         return scanOption(options);
     }
 

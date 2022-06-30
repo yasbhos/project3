@@ -4,8 +4,11 @@ import ir.ac.kntu.db.UserDB;
 import ir.ac.kntu.model.DateTime;
 import ir.ac.kntu.model.SingleResponder;
 import ir.ac.kntu.model.User;
+import ir.ac.kntu.model.question.ChoiceOneQuestion;
 import ir.ac.kntu.model.question.Question;
+import ir.ac.kntu.model.question.ShortAnswerQuestion;
 import ir.ac.kntu.util.DateTimeUtility;
+import ir.ac.kntu.util.ExportAsHTML;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +26,7 @@ public class NormalContest extends Contest {
         this.responders = new ArrayList<>();
     }
 
+    @Override
     public boolean addParticipant(User participant) {
         if (isCapacityFilled()) {
             System.out.println("The capacity is full");
@@ -37,13 +41,32 @@ public class NormalContest extends Contest {
     }
 
     @Override
+    public boolean containsParticipant(User target) {
+        return participants.contains(target);
+    }
+
+    @Override
+    public void registerMarkToFinalSent() {
+        System.out.println("Register mark to final sent of contest " + super.getName());
+        for (Question question : super.getQuestions()) {
+            question.registerMarkToFinalSent(super.getEndDateTime(), 100);
+        }
+    }
+
+    @Override
     public void scoreBoard() {
-        Collections.sort(responders);
+        responders.sort(Collections.reverseOrder());
         System.out.println("Scoreboard for contest " + super.getName());
         System.out.println("------------------------------------------------------------");
-        System.out.println("| Username | Total Score | Average sent DateTime");
+        System.out.println("| Username\tTotal Score\tAverage sent DateTime");
         responders.forEach(System.out::println);
         System.out.println("------------------------------------------------------------");
+    }
+
+    @Override
+    public void exportScoreBoard() {
+        responders.sort(Collections.reverseOrder());
+        ExportAsHTML.exportSingleResponders(responders, super.getName() + "-scoreboard.html");
     }
 
     @Override
@@ -55,6 +78,9 @@ public class NormalContest extends Contest {
             Question.Responder responder = question.getResponderByUsername(username);
             if (responder == null) {
                 continue;
+            }
+            if (isAutomaticScoring()) {
+                automaticScoring(question, responder);
             }
 
             totalScore += responder.getFinalAnswer().getScoreWithDelay();
@@ -68,20 +94,38 @@ public class NormalContest extends Contest {
         responders.add(responder);
     }
 
+    private void automaticScoring(Question question, Question.Responder responder) {
+        if (question instanceof ChoiceOneQuestion choiceOneQuestion) {
+            if (choiceOneQuestion.getCorrectAnswer().equals(responder.getFinalAnswer().getAnswer())) {
+                responder.getFinalAnswer().setScore(question.getScore());
+                responder.getFinalAnswer().setScoreWithDelay(question.getScore());
+            }
+        } else if (question instanceof ShortAnswerQuestion shortAnswerQuestion) {
+            if (shortAnswerQuestion.getCorrectAnswer().equals(responder.getFinalAnswer().getAnswer())) {
+                responder.getFinalAnswer().setScore(question.getScore());
+                responder.getFinalAnswer().setScoreWithDelay(question.getScore());
+            }
+        }
+    }
+
+    @Override
     public void finalResult(UserDB userDB) {
         if (DateTimeUtility.now().compareTo(super.getEndDateTime()) <= 0) {
             System.out.println("The contest is not over yet");
             return;
         }
+        if (responders.isEmpty()) {
+            return;
+        }
 
-        Collections.sort(responders);
+        responders.sort(Collections.reverseOrder());
         for (int i = 0; i < 5; i++) {
             responders.get(i).setTotalScore(responders.get(i).getTotalScore() + 20);
         }
 
         System.out.println("Final Result of contest " + super.getName());
         System.out.println("------------------------------------------------------------");
-        System.out.println("| Username | Total Score | Average sent DateTime");
+        System.out.println("| Username\tTotal Score\tAverage sent DateTime");
         responders.forEach(System.out::println);
         System.out.println("------------------------------------------------------------");
 

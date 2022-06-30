@@ -15,4 +15,13 @@ public class ShortAnswerQuestion extends Question {
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
+
+    @Override
+    public Question deepCopy() {
+        ShortAnswerQuestion question = new ShortAnswerQuestion(super.getName(), super.getScore(),
+                super.getDescription(), super.getType(), super.getLevel(), correctAnswer);
+        question.setUploadDateTime(super.getUploadDateTime());
+
+        return question;
+    }
 }
