@@ -33,6 +33,10 @@ public class GroupResponder implements Comparable<GroupResponder> {
         return new ArrayList<>(members);
     }
 
+    public double getTotalScore() {
+        return totalScore;
+    }
+
     public void setTotalScore(double totalScore) {
         this.totalScore = totalScore;
     }

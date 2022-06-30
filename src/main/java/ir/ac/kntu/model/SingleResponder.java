@@ -17,6 +17,10 @@ public class SingleResponder implements Comparable<SingleResponder> {
         return username;
     }
 
+    public double getTotalScore() {
+        return totalScore;
+    }
+
     public void setTotalScore(double totalScore) {
         this.totalScore = totalScore;
     }

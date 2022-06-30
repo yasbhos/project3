@@ -1,5 +1,6 @@
 package ir.ac.kntu.model.contest;
 
+import ir.ac.kntu.db.UserDB;
 import ir.ac.kntu.model.DateTime;
 import ir.ac.kntu.model.GroupResponder;
 import ir.ac.kntu.model.User;
@@ -33,7 +34,7 @@ public class SpecialContest extends Contest {
     }
 
     public boolean addGroup(String name, ArrayList<User> members) {
-        if ((responders.size() + 1) * maximumGroupsCapacity >= MAXIMUM_PARTICIPANTS) {
+        if (isCapacityFilled()) {
             System.out.println("The capacity is full");
             return false;
         }
@@ -41,6 +42,10 @@ public class SpecialContest extends Contest {
         GroupResponder responder = new GroupResponder(name, members);
 
         return responders.add(responder);
+    }
+
+    public boolean isCapacityFilled() {
+        return (responders.size() + 1) * maximumGroupsCapacity >= MAXIMUM_PARTICIPANTS;
     }
 
     public boolean addParticipantToExistingGroup(User participant) {
@@ -119,5 +124,34 @@ public class SpecialContest extends Contest {
         }
 
         return responders;
+    }
+
+    public void finalResult(UserDB userDB) {
+        if (DateTimeUtility.now().compareTo(super.getEndDateTime()) <= 0) {
+            System.out.println("The contest is not over yet");
+            return;
+        }
+
+        Collections.sort(responders);
+        for (int i = 0; i < 10; i++) {
+            responders.get(i).setTotalScore(responders.get(i).getTotalScore() + 25);
+        }
+
+        System.out.println("Scoreboard for contest " + super.getName());
+        System.out.println("------------------------------------------------------------");
+        System.out.println("| Group name | Total Score | Average sent DateTime");
+        responders.forEach(System.out::println);
+        System.out.println("------------------------------------------------------------");
+
+        for (GroupResponder responder : responders) {
+            ArrayList<User> targets = responder.getMembers();
+            if (targets == null) {
+                return;
+            }
+
+            for (User target : targets) {
+                target.setRating(target.getRating() + responder.getTotalScore());
+            }
+        }
     }
 }

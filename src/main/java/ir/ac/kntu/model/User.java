@@ -19,9 +19,7 @@ public class User {
 
     private String nationalCode;
 
-    private int rating;
-
-    private int rank;
+    private double rating;
 
     public User(String firstName, String username, String password, String email, String phoneNumber, String nationalCode) {
         this.admin = false;
@@ -32,7 +30,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.nationalCode = nationalCode;
         this.rating = 0;
-        this.rank = 0;
     }
 
     public boolean isAdmin() {
@@ -91,16 +88,16 @@ public class User {
         this.nationalCode = nationalCode;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
     public int getRank() {
-        return rating / 50;
+        return (int) (rating / 50);
     }
 
     @Override

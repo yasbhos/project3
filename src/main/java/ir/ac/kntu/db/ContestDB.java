@@ -1,8 +1,10 @@
 package ir.ac.kntu.db;
 
 import ir.ac.kntu.model.contest.Contest;
+import ir.ac.kntu.model.contest.NormalContest;
 import ir.ac.kntu.model.contest.PrivateContest;
 import ir.ac.kntu.model.User;
+import ir.ac.kntu.model.contest.SpecialContest;
 import ir.ac.kntu.util.DateTimeUtility;
 import ir.ac.kntu.util.ScannerWrapper;
 
@@ -43,9 +45,10 @@ public class ContestDB {
 
     public Contest getContestForUser(User currentUser) {
         for (Contest contest : contests) {
-            if (contest instanceof PrivateContest privateContest && !privateContest.canParticipant(currentUser)) {
+            if (checkContestGuards(currentUser, contest)) {
                 continue;
             }
+
             System.out.println("Id: " + contest.getId() + ", Name: " + contest.getName());
         }
         String id = ScannerWrapper.getInstance().readString("Enter contest Id: ");
@@ -56,6 +59,21 @@ public class ContestDB {
         }
 
         return contest;
+    }
+
+    private boolean checkContestGuards(User currentUser, Contest contest) {
+        if (contest instanceof NormalContest normalContest && normalContest.isCapacityFilled()) {
+            return true;
+        }
+        if (contest instanceof PrivateContest privateContest && privateContest.isCapacityFilled()
+                && !privateContest.canParticipant(currentUser)) {
+            return true;
+        }
+        if (contest instanceof SpecialContest specialContest && specialContest.isCapacityFilled()) {
+            return true;
+        }
+
+        return false;
     }
 
     public Contest getContestForGuest() {
